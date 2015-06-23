@@ -76,13 +76,16 @@ public class ServiceStateHandler {
             if (serviceStateHdlr != null) {
 
                 if (serviceStateHdlr.mAlertCriteria.isCriteriaSatisfied()) {
-                    Log.d("testing", "YES persisted!");
+
                     serviceStateHdlr.mAlertCriteria.setLastReportedStateCode(
                             serviceStateHdlr.mAlertCriteria.getStateCode());
+
+                    serviceStateHdlr.mNotifier.setMessage("Check yo' service foo");
                     serviceStateHdlr.mNotifier.sendNotification();
-                    serviceStateHdlr.mNotifier.playAudio();
+
+                    Log.d("testing", "YES persisted!");
                 } else {
-                    Log.d("testing", "NO! persisted");
+                    Log.d("testing", "NO persisted!");
                 }
             }
         }
