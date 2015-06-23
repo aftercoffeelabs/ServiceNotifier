@@ -75,7 +75,7 @@ public class Notifier {
         mBuilder.setSmallIcon(R.drawable.ic_launcher);
         mBuilder.setContentTitle("Phone Service Alert");
         mBuilder.setSound(mSoundUri);
-        mBuilder.setVibrate(new long[] { 1000, 1000});
+        mBuilder.setVibrate(new long[] {0, 500, 500, 500});
         mBuilder.setShowWhen(true);
 
         /*

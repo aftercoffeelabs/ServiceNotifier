@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class ServiceStateHandler
@@ -51,7 +52,8 @@ public class ServiceStateHandler {
             // Each time this is called, the previous existing, yet to executed
             // posted message should be cancelled and replaced with a new one,
             // essentially resetting the isPersisted() check timer
-            mHandler.postDelayed(mRunnable, 30000);
+            mHandler.postDelayed(mRunnable,
+                    TimeUnit.SECONDS.toMillis(AlertCriteria.MIN_PERSISTENCE_DURATION));
         }
     }
 
