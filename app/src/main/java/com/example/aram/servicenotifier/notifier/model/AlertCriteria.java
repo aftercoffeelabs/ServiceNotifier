@@ -1,5 +1,12 @@
 package com.example.aram.servicenotifier.notifier.model;
 
+import android.content.res.Resources;
+import android.telephony.ServiceState;
+import android.util.Log;
+
+import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.infrastructure.MyApp;
+
 /**
  * Class AlertCriteria
  */
@@ -7,11 +14,13 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final long MIN_PERSISTENCE_DURATION = 10;
+    public static final long MIN_PERSISTENCE_DURATION = 10L; // seconds
 
     private int mStateCode = -1;
     private int mLastReportedStateCode = -1;
     private long mCreationTime = 0;
+
+    private Resources res = MyApp.getRes();
 
     /**
      * Default class constructor.
@@ -21,10 +30,10 @@ public class AlertCriteria {
     /**
      * Alternate class constructor.
      */
-    public AlertCriteria(int stateCode) {
+    public AlertCriteria(int code) {
 
-        mStateCode = stateCode;
-        mLastReportedStateCode = stateCode;
+        mStateCode = code;
+        mLastReportedStateCode = code;
 
         mCreationTime = System.nanoTime();
     }
@@ -34,9 +43,9 @@ public class AlertCriteria {
         return mStateCode;
     }
 
-    public void setStateCode(int mStateCode) {
+    public void setStateCode(int code) {
 
-        this.mStateCode = mStateCode;
+        mStateCode = code;
     }
 
     public int getLastReportedStateCode() {
@@ -44,9 +53,9 @@ public class AlertCriteria {
         return mLastReportedStateCode;
     }
 
-    public void setLastReportedStateCode(int stateCode) {
+    public void setLastReportedStateCode(int code) {
 
-        mLastReportedStateCode = stateCode;
+        mLastReportedStateCode = code;
     }
 
     public void setTimeStamp() {
@@ -62,20 +71,42 @@ public class AlertCriteria {
         return (isPersisted() && mStateCode != mLastReportedStateCode) ? true: false;
     }
 
+    public String getServiceMsgString() {
+
+        String message = "";
+
+        switch (mStateCode) {
+            case ServiceState.STATE_IN_SERVICE:
+                message = res.getString(R.string.notification_content_in_service);
+                break;
+            case ServiceState.STATE_OUT_OF_SERVICE:
+                message = res.getString(R.string.notification_content_out_service);
+                break;
+            case ServiceState.STATE_EMERGENCY_ONLY:
+                // TODO: do not use
+                break;
+            case ServiceState.STATE_POWER_OFF:
+                // TODO: do not use
+                message = res.getString(R.string.notification_content_out_service);
+                break;
+        }
+        return message;
+    }
+
     private boolean isPersisted() {
 
-        return (getPersistanceDuration() >= MIN_PERSISTENCE_DURATION) ? true: false;
+        return (getPersistenceDuration() >= MIN_PERSISTENCE_DURATION) ? true: false;
     }
 
     /**
      * Returns the duration that this alert has persisted (in seconds).
      */
-    private long getPersistanceDuration() {
+    private long getPersistenceDuration() {
 
         long durationSecs = 0;
 
         long elapsedTimeNano = System.nanoTime() - mCreationTime;
-        durationSecs = (long)(elapsedTimeNano / 1000000000.0);
+        durationSecs = (elapsedTimeNano / 1000000000L) + 1L; // TODO - compensate division error
 
         return durationSecs;
     }

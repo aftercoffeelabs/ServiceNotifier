@@ -44,16 +44,8 @@ public class ServiceStateHandler {
             mAlertCriteria.setStateCode(stateCode);
             mAlertCriteria.setTimeStamp();
 
-            // TODO: Notes-
-            // check in 31 seconds, or alternate option would be to check
-            // in mAlert.getTimeStamp + 30sec offset, OR call postDelay
-            // from within the setTimeStamp() method
-            //
-            // Each time this is called, the previous existing, yet to executed
-            // posted message should be cancelled and replaced with a new one,
-            // essentially resetting the isPersisted() check timer
             mHandler.postDelayed(mRunnable,
-                    TimeUnit.SECONDS.toMillis(AlertCriteria.MIN_PERSISTENCE_DURATION));
+                    TimeUnit.SECONDS.toMillis(AlertCriteria.MIN_PERSISTENCE_DURATION ));
         }
     }
 
@@ -82,7 +74,9 @@ public class ServiceStateHandler {
                     serviceStateHdlr.mAlertCriteria.setLastReportedStateCode(
                             serviceStateHdlr.mAlertCriteria.getStateCode());
 
-                    serviceStateHdlr.mNotifier.setMessage("Check yo' service foo");
+                    serviceStateHdlr.mNotifier.setMessage(
+                            serviceStateHdlr.mAlertCriteria.getServiceMsgString());
+
                     serviceStateHdlr.mNotifier.sendNotification();
 
                     Log.d("testing", "YES persisted!");

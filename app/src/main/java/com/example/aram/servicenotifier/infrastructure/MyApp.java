@@ -2,6 +2,7 @@ package com.example.aram.servicenotifier.infrastructure;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * Created by Aram on 5/25/2015.
@@ -11,7 +12,8 @@ public class MyApp extends Application {
     /***
      * Member Variables
      ***/
-    private static Context _appContext;
+    private static Context mAppContext;
+    private static Resources mResources;
 
     /**************************************************************************
      *
@@ -23,7 +25,8 @@ public class MyApp extends Application {
     public void onCreate() {
 
         super.onCreate();
-        _appContext = this;
+        mAppContext = this;
+        mResources = getResources();
     }
 
     /**************************************************************************
@@ -33,6 +36,16 @@ public class MyApp extends Application {
      *************************************************************************/
     public static Context getContext(){
 
-        return _appContext;
+        return mAppContext;
+    }
+
+    /**************************************************************************
+     *
+     * getContext
+     *
+     *************************************************************************/
+    public static Resources getRes(){
+
+        return mResources;
     }
 }
