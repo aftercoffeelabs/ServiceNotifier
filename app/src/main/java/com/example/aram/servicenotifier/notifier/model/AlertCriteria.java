@@ -14,7 +14,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final int MIN_PERSISTENCE_DURATION = 10; // seconds
+    public static final int MIN_PERSISTENCE_DURATION = 60; // seconds
 
     private int mStateCode = -1;
     private int mLastReportedStateCode = -1;
