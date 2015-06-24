@@ -67,21 +67,22 @@ public class ServiceStateHandler {
         public void run() {
             // Get strong reference to ServiceStateHandler
             ServiceStateHandler serviceStateHdlr = mServiceStateHdlr.get();
+
             if (serviceStateHdlr != null) {
 
-                if (serviceStateHdlr.mAlertCriteria.isCriteriaSatisfied()) {
+                AlertCriteria alertCriteria = serviceStateHdlr.mAlertCriteria;
+                Notifier notifier = serviceStateHdlr.mNotifier;
 
-                    serviceStateHdlr.mAlertCriteria.setLastReportedStateCode(
-                            serviceStateHdlr.mAlertCriteria.getStateCode());
+                if (alertCriteria.isCriteriaSatisfied()) {
 
-                    serviceStateHdlr.mNotifier.setMessage(
-                            serviceStateHdlr.mAlertCriteria.getCurrentServiceStateString());
+                    // Update the state code being sent in the alert
+                    alertCriteria.setLastReportedStateCode(alertCriteria.getStateCode());
 
-                    serviceStateHdlr.mNotifier.sendNotification();
-
-                    Log.d("testing", "YES persisted!");
+                    // Send the alert
+                    notifier.setMessage(alertCriteria.getCurrentServiceStateString());
+                    notifier.sendNotification();
                 } else {
-                    Log.d("testing", "NO persisted!");
+                    Log.d("testing", "No persistence...");
                 }
             }
         }

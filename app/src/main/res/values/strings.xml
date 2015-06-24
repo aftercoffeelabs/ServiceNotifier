@@ -6,8 +6,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="notification_title">Phone Service Alert</string>
-    <string name="notification_content_in_service">Service has been restored.</string>
-    <string name="notification_content_out_service">Phone is out of service.</string>
-    <string name="notification_content_unknown">Unable to determine service state.</string>
+    <string name="notification_content_in_service">Your service has been restored.</string>
+    <string name="notification_content_out_service">Your phone is out of service.</string>
+    <string name="notification_content_unknown">Unable to determine your service state.</string>
 
 </resources>

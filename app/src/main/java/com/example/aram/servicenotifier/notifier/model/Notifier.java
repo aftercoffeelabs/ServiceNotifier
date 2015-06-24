@@ -35,9 +35,10 @@ public class Notifier {
         // Define sound URI
         mSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        // Get handle to system Resources
         res = MyApp.getRes();
 
-        // Init Notification Builder
+        // Initialize Notification Builder
         mBuilder = new NotificationCompat.Builder(MyApp.getContext());
         setDefaultNotificationParameters();
     }
@@ -62,6 +63,7 @@ public class Notifier {
      * Sends message to notification bar
      */
     public void sendNotification() {
+
         mNotificationMgr.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
