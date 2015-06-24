@@ -75,7 +75,7 @@ public class ServiceStateHandler {
                             serviceStateHdlr.mAlertCriteria.getStateCode());
 
                     serviceStateHdlr.mNotifier.setMessage(
-                            serviceStateHdlr.mAlertCriteria.getServiceMsgString());
+                            serviceStateHdlr.mAlertCriteria.getCurrentServiceStateString());
 
                     serviceStateHdlr.mNotifier.sendNotification();
 

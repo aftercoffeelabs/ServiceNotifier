@@ -14,7 +14,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final long MIN_PERSISTENCE_DURATION = 10L; // seconds
+    public static final int MIN_PERSISTENCE_DURATION = 10; // seconds
 
     private int mStateCode = -1;
     private int mLastReportedStateCode = -1;
@@ -71,7 +71,7 @@ public class AlertCriteria {
         return (isPersisted() && mStateCode != mLastReportedStateCode) ? true: false;
     }
 
-    public String getServiceMsgString() {
+    public String getCurrentServiceStateString() {
 
         String message = "";
 
@@ -83,11 +83,14 @@ public class AlertCriteria {
                 message = res.getString(R.string.notification_content_out_service);
                 break;
             case ServiceState.STATE_EMERGENCY_ONLY:
-                // TODO: do not use
+                // TODO: do not use this code
                 break;
             case ServiceState.STATE_POWER_OFF:
-                // TODO: do not use
+                // TODO: do not use this code
                 message = res.getString(R.string.notification_content_out_service);
+                break;
+            default:
+                message = res.getString(R.string.notification_content_unknown);
                 break;
         }
         return message;
@@ -101,12 +104,12 @@ public class AlertCriteria {
     /**
      * Returns the duration that this alert has persisted (in seconds).
      */
-    private long getPersistenceDuration() {
+    private double getPersistenceDuration() {
 
-        long durationSecs = 0;
+        double durationSecs = 0.0;
 
         long elapsedTimeNano = System.nanoTime() - mCreationTime;
-        durationSecs = (elapsedTimeNano / 1000000000L) + 1L; // TODO - compensate division error
+        durationSecs = (double)elapsedTimeNano / 1000000000.0;
 
         return durationSecs;
     }
