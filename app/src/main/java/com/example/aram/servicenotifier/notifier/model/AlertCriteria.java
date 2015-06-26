@@ -14,7 +14,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final int MIN_PERSISTENCE_DURATION = 60; // seconds
+    public static final int MIN_PERSISTENCE_DURATION = 120; // seconds
 
     private int mStateCode = -1;
     private int mLastReportedStateCode = -1;
@@ -79,15 +79,12 @@ public class AlertCriteria {
             case ServiceState.STATE_IN_SERVICE:
                 message = res.getString(R.string.notification_content_in_service);
                 break;
+            case ServiceState.STATE_POWER_OFF: // TODO: do not use POWER_OFF
             case ServiceState.STATE_OUT_OF_SERVICE:
                 message = res.getString(R.string.notification_content_out_service);
                 break;
             case ServiceState.STATE_EMERGENCY_ONLY:
-                // TODO: do not use this code
-                break;
-            case ServiceState.STATE_POWER_OFF:
-                // TODO: do not use this code
-                message = res.getString(R.string.notification_content_out_service);
+                message = res.getString(R.string.notification_content_emergency);
                 break;
             default:
                 message = res.getString(R.string.notification_content_unknown);
