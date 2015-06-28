@@ -61,9 +61,8 @@ public class SignalMonitorService extends Service {
         msg.arg1 = startId;
         mServiceHandler.sendMessage(msg);
 
-        // If we get killed, after returning from here,
-        // restart with last intent
-        return START_REDELIVER_INTENT; // TODO: check if this is the correct restart flag
+        // If we get killed, after returning from here, restart with null intent
+        return START_STICKY;
     }
 
     @Override
@@ -85,6 +84,8 @@ public class SignalMonitorService extends Service {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+
+        mLogger.log("LOW MEMORY!");
 
         // Called when the overall system is running low on memory
         //
