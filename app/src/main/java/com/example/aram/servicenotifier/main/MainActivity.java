@@ -2,6 +2,7 @@ package com.example.aram.servicenotifier.main;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.util.FileLogger;
+
+import java.io.FileInputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,6 +30,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
     @InjectView(R.id.textView) TextView mTextView;
     @InjectView(R.id.startButton) Button mStartButton;
+    @InjectView(R.id.logButton) Button mLogButton;
+    @InjectView(R.id.deleteButton) Button mDeleteButton;
+    @InjectView(R.id.logTextView) TextView mLogMsgTextView;
 
     private MainPresenter mPresenter;
 
@@ -59,8 +66,12 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         ButterKnife.inject(this);
 
         mStartButton.setOnClickListener(this);
+        mLogButton.setOnClickListener(this);
+        mDeleteButton.setOnClickListener(this);
 
         mPresenter = new MainPresenterImpl(this);
+
+        mLogMsgTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
@@ -77,7 +88,23 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
     public void onClick(View view) {
 
-        mPresenter.toggleNotificationState();
+        switch (view.getId()) {
+            case R.id.startButton:
+                mPresenter.toggleNotificationState();
+                break;
+            case R.id.logButton:
+                readLogFile();
+                break;
+            case R.id.deleteButton:
+                FileLogger.deleteLogFile();
+                mLogMsgTextView.setText("");
+                break;
+        }
+    }
+
+    private void readLogFile(){
+        String text = FileLogger.openAndReadFile();
+        mLogMsgTextView.setText(text.replace("\\n", "\n"));
     }
 
     @Override

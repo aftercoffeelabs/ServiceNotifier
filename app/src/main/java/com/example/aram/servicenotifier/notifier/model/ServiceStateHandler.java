@@ -3,6 +3,8 @@ package com.example.aram.servicenotifier.notifier.model;
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.aram.servicenotifier.util.FileLogger;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
@@ -81,8 +83,10 @@ public class ServiceStateHandler {
                     // Send the alert
                     notifier.setMessage(alertCriteria.getCurrentServiceStateString());
                     notifier.sendNotification();
+
+                    Log.d("testing", "Passed criteria!");
                 } else {
-                    Log.d("testing", "No persistence...");
+                    Log.d("testing", "Failed criteria...");
                 }
             }
         }

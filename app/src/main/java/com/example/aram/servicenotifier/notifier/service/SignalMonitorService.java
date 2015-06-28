@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.example.aram.servicenotifier.notifier.model.ServiceStateHandler;
 import com.example.aram.servicenotifier.infrastructure.MyApp;
+import com.example.aram.servicenotifier.util.FileLogger;
 
 /**
  * Class SignalMonitorService
@@ -29,6 +30,8 @@ public class SignalMonitorService extends Service {
     private TelephonyManager mTelephonyMgr;
     private MyPhoneStateListener mPhoneState;
     private ServiceStateHandler mServiceStateHdlr;
+
+    private FileLogger mLogger = new FileLogger();
 
     @Override
     public void onCreate(){
@@ -60,7 +63,7 @@ public class SignalMonitorService extends Service {
 
         // If we get killed, after returning from here,
         // restart with last intent
-        return START_REDELIVER_INTENT;
+        return START_REDELIVER_INTENT; // TODO: check if this is the correct restart flag
     }
 
     @Override
@@ -118,20 +121,23 @@ public class SignalMonitorService extends Service {
 
             switch (stateCode) {
                 case ServiceState.STATE_IN_SERVICE:
-                    stateStr += "ALERT: In Service";
+                    stateStr += "State: In Service";
                     break;
                 case ServiceState.STATE_OUT_OF_SERVICE:
-                    stateStr += "ALERT: Out of Service";
+                    stateStr += "State: Out of Service";
                     break;
                 case ServiceState.STATE_EMERGENCY_ONLY:
-                    stateStr += "ALERT: Emergency Only";
+                    stateStr += "State: Emergency Only";
                     break;
                 case ServiceState.STATE_POWER_OFF:
-                    stateStr += "ALERT: Power off";
+                    stateStr += "State: Power off";
                     break;
             }
             mServiceStateHdlr.handleServiceStateChange(stateCode);
+
+            // Debug logging
             Log.d("testing", stateStr);
+            mLogger.log(stateStr);
         }
 
     }
