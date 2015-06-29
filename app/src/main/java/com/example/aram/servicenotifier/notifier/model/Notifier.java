@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.aram.servicenotifier.R;
-import com.example.aram.servicenotifier.infrastructure.MyApp;
+import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
 
 /**
  * Class Notifier - Singleton
@@ -19,27 +19,26 @@ public class Notifier {
 
     private static Notifier sInstance = null;
 
+    private Context mContext = SignalMonitorService.getContext();
+    private Resources mResources = SignalMonitorService.getContext().getResources();
+
     private NotificationManager mNotificationMgr;
     private NotificationCompat.Builder mBuilder;
     private Uri mSoundUri;
-    private Resources res;
 
     /**
      * Class constructor.
      */
     private Notifier() {
 
-        mNotificationMgr = (NotificationManager) MyApp.getContext().getSystemService
+        mNotificationMgr = (NotificationManager) mContext.getSystemService
                 (Context.NOTIFICATION_SERVICE);
 
         // Define sound URI
         mSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        // Get handle to system Resources
-        res = MyApp.getRes();
-
         // Initialize Notification Builder
-        mBuilder = new NotificationCompat.Builder(MyApp.getContext());
+        mBuilder = new NotificationCompat.Builder(mContext);
         setDefaultNotificationParameters();
     }
 
@@ -74,7 +73,7 @@ public class Notifier {
 
         // These parameters will not change
         mBuilder.setSmallIcon(R.drawable.ic_launcher);
-        mBuilder.setContentTitle(res.getString(R.string.notification_title));
+        mBuilder.setContentTitle(mResources.getString(R.string.notification_title));
         mBuilder.setSound(mSoundUri);
         mBuilder.setVibrate(new long[]{0, 500, 500, 500});
         mBuilder.setShowWhen(true);

@@ -33,6 +33,8 @@ public class MyApp extends Application {
      *
      * getContext
      *
+     * Caution: Do not call this from a Service.
+     *
      *************************************************************************/
     public static Context getContext(){
 
@@ -41,7 +43,7 @@ public class MyApp extends Application {
 
     /**************************************************************************
      *
-     * getContext
+     * Get Resources
      *
      *************************************************************************/
     public static Resources getRes(){

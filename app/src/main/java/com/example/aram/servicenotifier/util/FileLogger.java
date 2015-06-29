@@ -1,8 +1,7 @@
 package com.example.aram.servicenotifier.util;
 
+import android.content.Context;
 import android.text.format.DateFormat;
-
-import com.example.aram.servicenotifier.infrastructure.MyApp;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,32 +21,44 @@ import java.util.Date;
 public class FileLogger {
 
     private final static String FILE_NAME = "service_notifier_log";
-    private static File mFile = new File(MyApp.getContext().getFilesDir(), FILE_NAME);
+    private static File mFile = null;
+    private Context mContext;
 
     private FileOutputStream mOutStream;
     private FileInputStream mInStream;
     private BufferedReader mBuffReader;
 
-    public FileLogger() {
+    public FileLogger(Context context) {
+
+        mContext = context;
+        mFile = new File(mContext.getFilesDir(), FILE_NAME);
     }
 
+    /**
+     * Log
+     *
+     * Only call this from Service
+     */
     public void log(String text){
 
-        // Append timestamp, create final formatted string
-        final CharSequence dateTime = DateFormat.format("yyyy-MM-dd hh:mm:ss", new Date());
-        String outStr = dateTime.toString() + ":   " + text + "\\n";
+        if (mContext != null) {
 
-        try {
-            if (mFile != null) {
-                mOutStream = MyApp.getContext().openFileOutput(
-                        mFile.getName(), MyApp.getContext().MODE_APPEND);
-                mOutStream.write(outStr.getBytes());
-                mOutStream.close();
-            } else {
-                mFile = new File(MyApp.getContext().getFilesDir(), FILE_NAME);
+            // Append timestamp, create final formatted string
+            final CharSequence dateTime = DateFormat.format("yyyy-MM-dd hh:mm:ss", new Date());
+            String outStr = dateTime.toString() + ":   " + text + "\\n";
+
+            try {
+                if (mFile != null) {
+                    mOutStream = mContext.openFileOutput(
+                            mFile.getName(), mContext.MODE_APPEND);
+                    mOutStream.write(outStr.getBytes());
+                    mOutStream.close();
+                } else {
+                    mFile = new File(mContext.getFilesDir(), FILE_NAME);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
         }
     }
 

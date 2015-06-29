@@ -15,7 +15,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.example.aram.servicenotifier.notifier.model.ServiceStateHandler;
-import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.util.FileLogger;
 
 /**
@@ -24,6 +23,8 @@ import com.example.aram.servicenotifier.util.FileLogger;
  */
 public class SignalMonitorService extends Service {
 
+    private static Context mServiceContext = null;
+
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
 
@@ -31,16 +32,27 @@ public class SignalMonitorService extends Service {
     private MyPhoneStateListener mPhoneState;
     private ServiceStateHandler mServiceStateHdlr;
 
-    private FileLogger mLogger = new FileLogger();
+    private FileLogger mLogger;
+
+    /**
+     * Get Service Context
+     */
+    public static Context getContext(){
+        return mServiceContext;
+    }
 
     @Override
     public void onCreate(){
         super.onCreate();
 
+        mServiceContext = this;
+
+        mLogger = new FileLogger(mServiceContext);
+
         mServiceStateHdlr = new ServiceStateHandler();
 
         mPhoneState = new MyPhoneStateListener();
-        mTelephonyMgr = (TelephonyManager) MyApp.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         HandlerThread thread = new HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -72,7 +84,8 @@ public class SignalMonitorService extends Service {
         // Cleanup resources
         // Unregister the listener
         mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_NONE);
-
+        mTelephonyMgr = null;
+        mPhoneState = null;
         mServiceStateHdlr = null;
     }
 

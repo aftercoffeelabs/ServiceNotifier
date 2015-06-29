@@ -2,10 +2,9 @@ package com.example.aram.servicenotifier.notifier.model;
 
 import android.content.res.Resources;
 import android.telephony.ServiceState;
-import android.util.Log;
 
 import com.example.aram.servicenotifier.R;
-import com.example.aram.servicenotifier.infrastructure.MyApp;
+import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
 
 /**
  * Class AlertCriteria
@@ -14,13 +13,13 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final int MIN_PERSISTENCE_DURATION = 120; // seconds
+    public static final int MIN_PERSISTENCE_DURATION = 30; // seconds
+
+    private Resources mResources = SignalMonitorService.getContext().getResources();
 
     private int mStateCode = -1;
     private int mLastReportedStateCode = -1;
     private long mCreationTime = 0;
-
-    private Resources res = MyApp.getRes();
 
     /**
      * Default class constructor.
@@ -77,17 +76,17 @@ public class AlertCriteria {
 
         switch (mStateCode) {
             case ServiceState.STATE_IN_SERVICE:
-                message = res.getString(R.string.notification_content_in_service);
+                message = mResources.getString(R.string.notification_content_in_service);
                 break;
             case ServiceState.STATE_POWER_OFF: // TODO: do not use POWER_OFF
             case ServiceState.STATE_OUT_OF_SERVICE:
-                message = res.getString(R.string.notification_content_out_service);
+                message = mResources.getString(R.string.notification_content_out_service);
                 break;
             case ServiceState.STATE_EMERGENCY_ONLY:
-                message = res.getString(R.string.notification_content_emergency);
+                message = mResources.getString(R.string.notification_content_emergency);
                 break;
             default:
-                message = res.getString(R.string.notification_content_unknown);
+                message = mResources.getString(R.string.notification_content_unknown);
                 break;
         }
         return message;
