@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.util.FileLogger;
-
-import java.io.FileInputStream;
+import com.squareup.leakcanary.LeakCanary;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -61,6 +60,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LeakCanary.install(getApplication()); // TODO: memory debugging
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);

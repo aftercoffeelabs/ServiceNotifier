@@ -15,18 +15,18 @@ import com.example.aram.servicenotifier.notifier.model.OnNotificationStateChange
  */
 public class ServiceInteractorImpl implements ServiceInteractor {
 
+    private static final int MONITOR_STOPPED = 0;
+    private static final int MONITOR_RUNNING = 1;
+
     private static ServiceInteractorImpl sInstance = null;
 
-    private enum MonitorState { MONITOR_RUNNING, MONITOR_STOPPED }
-    private MonitorState mMonitorState;
+    private int mMonitorState = MONITOR_STOPPED;
 
     /**
      * Class constructor.
      */
     private ServiceInteractorImpl() {
-
-        // Initializes MonitorState
-        getServiceStatus();
+        initializeMonitorState();
     }
 
     /**
@@ -63,12 +63,12 @@ public class ServiceInteractorImpl implements ServiceInteractor {
         // toggle service state each time button is clicked
         switch (mMonitorState) {
             case MONITOR_RUNNING:
-                mMonitorState = MonitorState.MONITOR_STOPPED;
+                mMonitorState = MONITOR_STOPPED;
                 MyApp.getContext().stopService(theIntent);
                 listener.onNotificationStateDisabled();
                 break;
             case MONITOR_STOPPED:
-                mMonitorState = MonitorState.MONITOR_RUNNING;
+                mMonitorState = MONITOR_RUNNING;
                 MyApp.getContext().startService(theIntent);
                 listener.onNotificationStateEnabled();
                 break;
@@ -80,12 +80,12 @@ public class ServiceInteractorImpl implements ServiceInteractor {
      *
      * This method should be called each time upon creation of this class
      */
-    private void getServiceStatus() {
+    private void initializeMonitorState() {
 
         if (isMyServiceRunning(SignalMonitorService.class)) {
-            mMonitorState = MonitorState.MONITOR_RUNNING;
+            mMonitorState = MONITOR_RUNNING;
         } else {
-            mMonitorState = MonitorState.MONITOR_STOPPED;
+            mMonitorState = MONITOR_STOPPED;
         }
     }
 

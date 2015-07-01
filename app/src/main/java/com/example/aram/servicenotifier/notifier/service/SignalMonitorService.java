@@ -14,6 +14,7 @@ import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.ServiceStateHandler;
 import com.example.aram.servicenotifier.util.FileLogger;
 

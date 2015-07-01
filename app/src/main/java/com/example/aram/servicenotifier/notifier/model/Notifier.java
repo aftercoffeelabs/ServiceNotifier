@@ -75,7 +75,10 @@ public class Notifier {
         mBuilder.setSmallIcon(R.drawable.ic_launcher);
         mBuilder.setContentTitle(mResources.getString(R.string.notification_title));
         mBuilder.setSound(mSoundUri);
+
+        //TODO: use different vibration pattern for in-service and out of service
         mBuilder.setVibrate(new long[]{0, 500, 500, 500});
+
         mBuilder.setShowWhen(true);
     }
 }

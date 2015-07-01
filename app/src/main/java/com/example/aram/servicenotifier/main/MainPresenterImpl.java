@@ -34,16 +34,12 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
 
     @Override
     public void onNotificationStateEnabled() {
-
         mMainView.setButtonText(true);
-        //mMainView.showMessage("Service is RUNNING");
     }
 
     @Override
     public void onNotificationStateDisabled() {
-
         mMainView.setButtonText(false);
-        //mMainView.showMessage("Service is STOPPED");
     }
 
 }
