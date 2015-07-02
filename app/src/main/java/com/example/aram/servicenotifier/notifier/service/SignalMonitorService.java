@@ -3,18 +3,12 @@ package com.example.aram.servicenotifier.notifier.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.ServiceStateHandler;
 import com.example.aram.servicenotifier.util.FileLogger;
 
@@ -25,9 +19,6 @@ import com.example.aram.servicenotifier.util.FileLogger;
 public class SignalMonitorService extends Service {
 
     private static Context mServiceContext = null;
-
-//    private Looper mServiceLooper;
-//    private ServiceHandler mServiceHandler;
 
     private TelephonyManager mTelephonyMgr;
     private MyPhoneStateListener mPhoneState;
