@@ -68,6 +68,8 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         mPresenter = new MainPresenterImpl(this);
 
         mLogMsgTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        //logHeapSize();
     }
 
     @Override
@@ -83,7 +85,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
+        mPresenter = null;
     }
 
     public void onClick(View view) {

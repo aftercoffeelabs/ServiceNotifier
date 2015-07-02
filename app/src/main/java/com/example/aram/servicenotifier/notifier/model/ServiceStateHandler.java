@@ -3,8 +3,6 @@ package com.example.aram.servicenotifier.notifier.model;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.aram.servicenotifier.util.FileLogger;
-
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
@@ -13,16 +11,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class ServiceStateHandler {
 
+    // Additional 1 sec is to compensate for time delay precision errors
+    // Example: Service state changes at 20.738, postDelayed is set using 15 sec, persistence
+    //          is checked at 35.071, resulting in time delta of 14.333, which fails.
+    public static final int DELAY_DURATION = AlertCriteria.MIN_PERSISTENCE_DURATION + 1;
+
     private AlertCriteria mAlertCriteria;
     private Handler mHandler = new Handler();
-    private final PersistenceVerifierRunnable mRunnable;
+    private final PersistenceVerifierRunnable mVerifierRunnable;
     private Notifier mNotifier;
 
     /**
      * Default class constructor.
      */
     public ServiceStateHandler(){
-        mRunnable = new PersistenceVerifierRunnable(this);
+        mVerifierRunnable = new PersistenceVerifierRunnable(this);
         mNotifier = Notifier.instance();
     }
 
@@ -46,11 +49,10 @@ public class ServiceStateHandler {
             mAlertCriteria.setStateCode(stateCode);
             mAlertCriteria.setTimeStamp();
 
-            mHandler.postDelayed(mRunnable,
-                    TimeUnit.SECONDS.toMillis(AlertCriteria.MIN_PERSISTENCE_DURATION ));
+            mHandler.postDelayed(mVerifierRunnable,
+                    TimeUnit.SECONDS.toMillis(DELAY_DURATION));
         }
     }
-
 
     /**
      * Static Inner Class PersistenceVerifierRunnable

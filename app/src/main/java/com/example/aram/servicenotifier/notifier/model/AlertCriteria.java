@@ -13,7 +13,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final int MIN_PERSISTENCE_DURATION = 120; // seconds
+    public static final int MIN_PERSISTENCE_DURATION = 15; // seconds
 
     private Resources mResources = SignalMonitorService.getContext().getResources();
 

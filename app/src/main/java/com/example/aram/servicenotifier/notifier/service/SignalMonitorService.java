@@ -86,7 +86,6 @@ public class SignalMonitorService extends Service {
         // Called when the overall system is running low on memory
         //
         // TODO: is this useful for performace analysis?
-
     }
 
     /**
