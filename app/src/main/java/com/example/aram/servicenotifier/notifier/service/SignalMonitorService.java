@@ -26,8 +26,8 @@ public class SignalMonitorService extends Service {
 
     private static Context mServiceContext = null;
 
-    private Looper mServiceLooper;
-    private ServiceHandler mServiceHandler;
+//    private Looper mServiceLooper;
+//    private ServiceHandler mServiceHandler;
 
     private TelephonyManager mTelephonyMgr;
     private MyPhoneStateListener mPhoneState;
@@ -45,34 +45,22 @@ public class SignalMonitorService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
+        Log.d("testing", "Service - onCreate");
 
         mServiceContext = this;
-
         mLogger = new FileLogger(mServiceContext);
-
         mServiceStateHdlr = new ServiceStateHandler();
 
         mPhoneState = new MyPhoneStateListener();
         mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        HandlerThread thread = new HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-
-        // Get the HandlerThread's Looper and use it for our Handler
-        mServiceLooper = thread.getLooper();
-        mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        //
-        // TODO - can we just register the telephonyMgr listener here instead of in the Handler?
-        //
+        Log.d("testing", "Service - onStartCommand");
 
-        Message msg = mServiceHandler.obtainMessage();
-        msg.arg1 = startId;
-        mServiceHandler.sendMessage(msg);
+        mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE);
 
         // If we get killed, after returning from here, restart with null intent
         return START_STICKY;
@@ -88,6 +76,9 @@ public class SignalMonitorService extends Service {
         mTelephonyMgr = null;
         mPhoneState = null;
         mServiceStateHdlr = null;
+        mServiceContext = null;
+        mLogger = null;
+        Log.d("testing", "Service - onDestroy");
     }
 
     @Override
@@ -105,20 +96,6 @@ public class SignalMonitorService extends Service {
         //
         // TODO: is this useful for performace analysis?
 
-    }
-    //
-    // Handler Class
-    //
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-        @Override
-        public void handleMessage(Message msg) {
-
-            // Register the listener
-            mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE);
-        }
     }
 
     /**
@@ -154,7 +131,5 @@ public class SignalMonitorService extends Service {
             Log.d("testing", stateStr);
             mLogger.log(stateStr);
         }
-
     }
-
 }

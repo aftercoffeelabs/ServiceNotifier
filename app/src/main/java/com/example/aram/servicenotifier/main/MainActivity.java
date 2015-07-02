@@ -1,8 +1,10 @@
 package com.example.aram.servicenotifier.main;
 
+import android.app.ActivityManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,14 +20,6 @@ import butterknife.InjectView;
 
 
 public class MainActivity extends ActionBarActivity implements MainView, View.OnClickListener {
-
-    //////////////////////////////////////////////
-    // TODO: NOTES
-    //
-    // (1) Use a notification status bar message with a PendingIntent that can message the Activity
-    //
-    // (2) LocalBroadcastManager for service<>activity comms
-    //////////////////////////////////////////////
 
     @InjectView(R.id.textView) TextView mTextView;
     @InjectView(R.id.startButton) Button mStartButton;
@@ -61,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LeakCanary.install(getApplication()); // TODO: memory debugging
+        //LeakCanary.install(getApplication()); // TODO: memory debugging
 
         setContentView(R.layout.activity_main);
 
@@ -83,8 +77,12 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
+        super.onStop();
+    }
 
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 
@@ -125,5 +123,11 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
             mStartButton.setText("START");  // When service is stopped
             mTextView.setText("Service is Stopped");
         }
+    }
+
+    private void logHeapSize() {
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        int memoryClass = am.getMemoryClass();
+        Log.d("testing", "memoryClass:" + Integer.toString(memoryClass));
     }
 }

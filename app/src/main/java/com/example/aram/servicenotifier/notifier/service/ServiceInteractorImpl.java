@@ -91,8 +91,6 @@ public class ServiceInteractorImpl implements ServiceInteractor {
 
     /**
      * Generic method that returns the status of the specified service.
-     *
-     * TODO: Consider moving this to a Utils class.
      */
     private boolean isMyServiceRunning(Class<?> serviceClass) {
 
