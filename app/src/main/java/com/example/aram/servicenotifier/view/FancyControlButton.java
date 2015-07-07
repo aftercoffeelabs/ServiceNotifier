@@ -2,7 +2,11 @@ package com.example.aram.servicenotifier.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
@@ -16,25 +20,34 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     /**
      * Member variables
      */
-    private static final int FILL_INCREMENT = 1;
-    private static final int FILL_DELAY = 2; // milliseconds
+    private static final int EXPAND_INCREMENT = 1;
+    private static final int FILL_DELAY_MS  = 2;
+    private static final int FINAL_FILL_ALPHA = 120;
 
-    private int mAttrOffStateButtonSize;
-    private int mAttrOffStateButtonFillColor;
-    private int mAttrOffStateButtonStrokeColor;
-    private int mAttrOnStateButtonSize;
-    private int mAttrOnStateButtonFillColor;
-    private int mAttrOnStateButtonStrokeColor;
+    private boolean mButtonOn = false;
+
+    private int mAlphaIncrement;
+
+    // Default values to be overridden by xml attributes
+    private int mAttrOffStateButtonSize = 100;
+    private int mAttrOffStateButtonColor = 0xff000000;
+    private float mAttrOffStateButtonStrokeWidth = 0.5f;
+
+    private int mAttrOnStateButtonSize = 200;
+    private int mAttrOnStateButtonColor = 0xff000000;
+    private int mAttrOnStateButtonStrokeColor = 0xff000000;
+    private float mAttrOnStateButtonStrokeWidth = 10.0f;
 
     private Circle2d mOffStateCircle;   // represents the OFF state of the button
     private Circle2d mOnStateCircle;    // represents the ON state of the button
+
 
     /**
      * FancyControlButton constructor
      */
     public FancyControlButton (Context context, AttributeSet attrs) {
         super(context, attrs);
-        initProperties(context, attrs);
+        init(context, attrs);
 
         setOnClickListener(this);
     }
@@ -46,54 +59,86 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     public void onClick(View v) {
 
         if (v.getId() == R.id.control_button) {
+
+            mButtonOn = !mButtonOn;
             runAnimation();
         }
     }
 
     /**
-     * initProperties
+     * init
      */
     @Override
-    public void initProperties(Context context, AttributeSet attrs) {
+    public void init(Context context, AttributeSet attrs) {
 
         // Read button attributes from layout XML
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.FancyControlButton, 0, 0);
 
-        // TODO - create static conts defaults to use in the calls below
         mAttrOffStateButtonSize = (int)a.getDimension(
-                R.styleable.FancyControlButton_offStateSize, 0.0f);
+                R.styleable.FancyControlButton_offStateSize, mAttrOffStateButtonSize);
 
-        mAttrOffStateButtonFillColor = a.getColor(
-                R.styleable.FancyControlButton_offStateFillColor, 0xff000000);
+        mAttrOffStateButtonColor = a.getColor(
+                R.styleable.FancyControlButton_offStateColor, mAttrOffStateButtonColor);
 
-        mAttrOffStateButtonStrokeColor = a.getColor(
-                R.styleable.FancyControlButton_offStateStrokeColor, 0xff000000);
+        mAttrOffStateButtonStrokeWidth = a.getDimension(
+                R.styleable.FancyControlButton_offStateStrokeWidth, mAttrOffStateButtonStrokeWidth);
 
         mAttrOnStateButtonSize = (int)a.getDimension(
-                R.styleable.FancyControlButton_onStateSize, 0.0f);
+                R.styleable.FancyControlButton_onStateSize, mAttrOnStateButtonSize);
 
-        mAttrOnStateButtonFillColor = a.getColor(
-                R.styleable.FancyControlButton_onStateFillColor, 0xff000000);
+        mAttrOnStateButtonColor = a.getColor(
+                R.styleable.FancyControlButton_onStateColor, mAttrOnStateButtonColor);
 
         mAttrOnStateButtonStrokeColor = a.getColor(
-                R.styleable.FancyControlButton_onStateStrokeColor, 0xff000000);
+                R.styleable.FancyControlButton_onStateStrokeColor, mAttrOnStateButtonStrokeColor);
+
+        mAttrOnStateButtonStrokeWidth = a.getDimension(
+                R.styleable.FancyControlButton_onStateStrokeWidth, mAttrOnStateButtonStrokeWidth);
 
         a.recycle();
 
+        // Create the 2d Circle objects to represent the control button
+        mOffStateCircle = new Circle2d(0, 0, mAttrOffStateButtonSize);
+        mOffStateCircle.paint().setStrokeWidth(mAttrOffStateButtonStrokeWidth);
+        mOffStateCircle.paint().setColor(mAttrOffStateButtonColor);
+        mOffStateCircle.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
+        mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
 
+        // The ON state circle is initially fully transparent and the same
+        // size as the OFF state circle
+        mOnStateCircle = new Circle2d(0, 0, mAttrOffStateButtonSize);
+        mOnStateCircle.paint().setStrokeWidth(mAttrOnStateButtonStrokeWidth);
+        mOnStateCircle.paint().setColor(mAttrOnStateButtonColor);
+        mOnStateCircle.paint().setAlpha(255);
+        mOnStateCircle.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
+        mOnStateCircle.paint().setStyle(Paint.Style.FILL);
+
+//        mAlphaIncrement = 2;
+//        mAlphaIncrement = 255 / (
+//                (mOnStateCircle.getRadius() - mOffStateCircle.getRadius()) / EXPAND_INCREMENT);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        int x = w / 2;
-        int y = h / 2;
+        int centerX = w / 2;
+        int centerY = h / 2;
 
-        // Create the 2d Circle objects to represent the control button
-        mOffStateCircle = new Circle2d(x, y, mAttrOffStateButtonSize);
-        mOnStateCircle = new Circle2d(x, y, mAttrOnStateButtonSize);
+        // Update 2d circle dimensions
+        if (mOffStateCircle != null) {
+            mOffStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize);
+        }
+
+        if (mOnStateCircle != null) {
+            mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize);
+        }
     }
 
     /**
@@ -102,6 +147,93 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     @Override
     public void runAnimation() {
 
+        // TODO: prevent new thread from starting again until animation cycle completes
+
+        (new Thread(new AnimationRunnable())).start();
+    }
+
+    /**
+     * onDraw
+     */
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        // Draw the OFF circle
+        if (mOffStateCircle.getRadius() == mOnStateCircle.getRadius()) {
+            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
+        } else {
+
+            synchronized (mOnStateCircle) {
+
+                mOnStateCircle.paint().setStyle(Paint.Style.STROKE);
+                mOnStateCircle.paint().setAlpha(50);
+                mOnStateCircle.paint().setColor(mAttrOnStateButtonStrokeColor);
+                canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
+                        mOnStateCircle.getRadius(), mOnStateCircle.paint());
+
+                // Draw the ON circle button fill
+                mOnStateCircle.paint().setStyle(Paint.Style.FILL);
+                mOnStateCircle.paint().setColor(mAttrOnStateButtonColor);
+                mOnStateCircle.paint().setAlpha(255);
+                canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
+                        mOnStateCircle.getRadius(), mOnStateCircle.paint());
+
+
+            }
+        }
+    }
+
+    /**
+     * Inner class AnimationRunnable
+     */
+    private class AnimationRunnable implements Runnable {
+
+        public void run() {
+
+            Log.d("testing", "Run - start radius is " + Integer.toString(mOnStateCircle.getRadius()));
+
+            boolean isExpanding;
+
+            synchronized (mOnStateCircle) {
+                isExpanding = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
+            }
+
+            while (keepRunning(isExpanding, mAttrOnStateButtonSize)) {
+
+                synchronized (mOnStateCircle) {
+
+                    int currentRadius = mOnStateCircle.getRadius();
+                    int currentFillAlpha = mOnStateCircle.paint().getAlpha();
+
+                    if (isExpanding) {
+                        mOnStateCircle.setRadius(currentRadius + EXPAND_INCREMENT);
+                        //mOnStateCircle.paint().setAlpha(currentFillAlpha + mAlphaIncrement);
+                    } else {
+                        mOnStateCircle.setRadius(currentRadius - EXPAND_INCREMENT);
+                        //mOnStateCircle.paint().setAlpha(currentFillAlpha - mAlphaIncrement);
+                    }
+                }
+                postInvalidate();
+                SystemClock.sleep(FILL_DELAY_MS);
+            }
+            Log.d("testing", "Run - end radius is " + Integer.toString(mOnStateCircle.getRadius()));
+        }
+
+        private boolean keepRunning(boolean isExpanding, int size) {
+
+            boolean result;
+
+            synchronized (mOnStateCircle) {
+                if (isExpanding) {
+                    result = mOnStateCircle.getRadius() < size;
+                } else {
+                    result = mOnStateCircle.getRadius() > mOffStateCircle.getRadius();
+                }
+            }
+            return result;
+        }
     }
 
 }

@@ -13,20 +13,18 @@ public class Circle2d {
     private int mCenterX;
     private int mCenterY;
     private int mRadius;
-    private int mFillColor;
-    private int mStrokeColor;
-    private float mStrokeWidth;
+
     private Paint mPaint;
 
     public Circle2d(int x, int y, int radius) {
         mCenterX = x;
         mCenterY = y;
         mRadius = radius;
+
+        mPaint = new Paint();
     }
 
-    public int getCenterX() {
-        return mCenterX;
-    }
+    public int getCenterX() { return mCenterX; }
 
     public void setCenterX(int x) {
         mCenterX = x;
@@ -40,20 +38,8 @@ public class Circle2d {
         mCenterY = y;
     }
 
-    public int getFillColor() {
-        return mFillColor;
-    }
-
-    public void setFillColor(int color) {
-        mFillColor = color;
-    }
-
-    public Paint getPaint() {
+    public Paint paint() {
         return mPaint;
-    }
-
-    public void setPaint(Paint paint) {
-        mPaint = paint;
     }
 
     public int getRadius() {
@@ -64,27 +50,9 @@ public class Circle2d {
         mRadius = r;
     }
 
-    public int getStrokeColor() {
-        return mStrokeColor;
-    }
-
-    public void setStrokeColor(int color) {
-        mStrokeColor = color;
-    }
-
-    public float getStrokeWidth() {
-        return mStrokeWidth;
-    }
-
-    public void setStrokeWidth(float width) {
-        mStrokeWidth = width;
-    }
-
-    public int getFillColorAlpha() {
-        return Color.alpha(mFillColor);
-    }
-
-    public int getStrokeColorAlpha() {
-        return Color.alpha(mStrokeColor);
+    public void setDimensions(int centerX, int centerY, int radius) {
+        mCenterX = centerX;
+        mCenterY = centerY;
+        mRadius = radius;
     }
 }

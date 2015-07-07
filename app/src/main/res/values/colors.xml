@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="OffButtonGray">#95a5a6</color>
+    <color name="OnButtonGreen">#2ecc71</color>
+    <color name="OnButtonStrokeColor">#c0392b</color>
+    <color name="BackgroundBlue">#2c3e50</color>
+
+</resources>

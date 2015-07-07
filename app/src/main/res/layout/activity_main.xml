@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/view_main_root"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:background="@color/BackgroundBlue">
 
     <com.example.aram.servicenotifier.view.FancyControlButton
         android:id="@+id/control_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/debug_button"/>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:offStateColor="@color/OffButtonGray"
+        app:offStateSize="@dimen/button_off_size"
+        app:offStateStrokeWidth="@dimen/button_off_strokeSize"
+        app:onStateColor="@color/OnButtonGreen"
+        app:onStateSize="@dimen/button_on_size"
+        app:onStateStrokeWidth="@dimen/button_on_strokeSize"
+        app:onStateStrokeColor="@color/OnButtonStrokeColor"
+        android:layout_weight="4" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:text="Debug Mode"
         android:id="@+id/debug_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        android:layout_weight="1"/>
+</LinearLayout>

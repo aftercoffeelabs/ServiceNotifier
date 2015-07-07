@@ -3,12 +3,13 @@
 
     <declare-styleable name="FancyControlButton">
         <attr name="offStateSize" format="dimension" />
-        <attr name="offStateFillColor" format="color" />
-        <attr name="offStateStrokeColor" format="color" />
+        <attr name="offStateColor" format="color" />
+        <attr name="offStateStrokeWidth" format="dimension" />
 
         <attr name="onStateSize" format="dimension" />
-        <attr name="onStateFillColor" format="color" />
+        <attr name="onStateColor" format="color" />
         <attr name="onStateStrokeColor" format="color" />
+        <attr name="onStateStrokeWidth" format="dimension" />
 
     </declare-styleable>
 

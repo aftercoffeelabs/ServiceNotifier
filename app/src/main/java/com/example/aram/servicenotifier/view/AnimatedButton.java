@@ -11,7 +11,7 @@ public interface AnimatedButton {
     /**
      * Read XML attributes, create all shape objects and initialize properties
      */
-    public void initProperties(final Context context, AttributeSet attrs);
+    public void init(final Context context, AttributeSet attrs);
 
     /**
      * Start animation
