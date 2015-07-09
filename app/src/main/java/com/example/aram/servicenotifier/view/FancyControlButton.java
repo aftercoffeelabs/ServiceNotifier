@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
-import com.example.aram.servicenotifier.util.Circle2d;
+import com.example.aram.servicenotifier.util.CirclePropertyHolder;
 
 /**
  * Class FancyControlButton
@@ -38,9 +38,8 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     private int mAttrOnStateButtonStrokeColor = 0xff000000;
     private float mAttrOnStateButtonStrokeWidth = 10.0f;
 
-    private Circle2d mOffStateCircle;   // represents the OFF state of the button
-    private Circle2d mOnStateCircle;    // represents the ON state of the button
-
+    private CirclePropertyHolder mOffStateCircle;   // represents the OFF state of the button
+    private CirclePropertyHolder mOnStateCircle;    // represents the ON state of the button
 
     /**
      * FancyControlButton constructor
@@ -60,8 +59,11 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         if (v.getId() == R.id.control_button) {
 
+            // Toggle state
             mButtonOn = !mButtonOn;
             runAnimation();
+
+            //this.animate().scaleX(2.0f).scaleY(2.0f);
         }
     }
 
@@ -99,7 +101,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         a.recycle();
 
         // Create the 2d Circle objects to represent the control button
-        mOffStateCircle = new Circle2d(0, 0, mAttrOffStateButtonSize);
+        mOffStateCircle = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mOffStateCircle.paint().setStrokeWidth(mAttrOffStateButtonStrokeWidth);
         mOffStateCircle.paint().setColor(mAttrOffStateButtonColor);
         mOffStateCircle.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -107,7 +109,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         // The ON state circle is initially fully transparent and the same
         // size as the OFF state circle
-        mOnStateCircle = new Circle2d(0, 0, mAttrOffStateButtonSize);
+        mOnStateCircle = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mOnStateCircle.paint().setStrokeWidth(mAttrOnStateButtonStrokeWidth);
         mOnStateCircle.paint().setColor(mAttrOnStateButtonColor);
         mOnStateCircle.paint().setAlpha(255);
@@ -128,16 +130,27 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
+        // Get view dimensions with padding factored in
+        int padX = getPaddingLeft() + getPaddingRight();
+        int padY = getPaddingTop() + getPaddingBottom();
+
+        int viewWidth = w - padX;
+        int viewHeight = h - padY;
+
+        // Max size of circle to fit within View
+        int diameter = (int)Math.min(viewWidth, viewHeight);
+
+        // Get center of view
         int centerX = w / 2;
         int centerY = h / 2;
 
         // Update 2d circle dimensions
         if (mOffStateCircle != null) {
-            mOffStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize);
+            mOffStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
         }
 
         if (mOnStateCircle != null) {
-            mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize);
+            mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
         }
     }
 
