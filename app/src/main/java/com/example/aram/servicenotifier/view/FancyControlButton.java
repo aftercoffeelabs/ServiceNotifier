@@ -2,6 +2,8 @@ package com.example.aram.servicenotifier.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.SystemClock;
@@ -15,16 +17,18 @@ import com.example.aram.servicenotifier.util.CirclePropertyHolder;
 /**
  * Class FancyControlButton
  */
-public class FancyControlButton extends View implements AnimatedButton, View.OnClickListener {
+public class FancyControlButton extends View implements AnimatedButton, View.OnClickListener,
+        AnimatedButton.AnimationStateListener {
 
     /**
      * Member variables
      */
     private static final int EXPAND_INCREMENT = 1;
     private static final int FILL_DELAY_MS  = 2;
-    private static final int FINAL_FILL_ALPHA = 120;
+    private static final int MIN_ALPHA = 0;
+    private static final int MAX_ALPHA = 255;
 
-    private boolean mButtonOn = false;
+    private boolean mButtonOn;
 
     private int mAlphaIncrement;
 
@@ -40,6 +44,9 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
     private CirclePropertyHolder mOffStateCircle;   // represents the OFF state of the button
     private CirclePropertyHolder mOnStateCircle;    // represents the ON state of the button
+    private CirclePropertyHolder mRipple;           // ripple effect
+
+    private Bitmap mBitmap;
 
     /**
      * FancyControlButton constructor
@@ -61,9 +68,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
             // Toggle state
             mButtonOn = !mButtonOn;
-            runAnimation();
-
-            //this.animate().scaleX(2.0f).scaleY(2.0f);
+            runToggleAnimation();
         }
     }
 
@@ -100,25 +105,35 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         a.recycle();
 
-        // Create the 2d Circle objects to represent the control button
+        // The OFF state circle
         mOffStateCircle = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mOffStateCircle.paint().setStrokeWidth(mAttrOffStateButtonStrokeWidth);
         mOffStateCircle.paint().setColor(mAttrOffStateButtonColor);
         mOffStateCircle.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
 
-        // The ON state circle is initially fully transparent and the same
-        // size as the OFF state circle
+        // The ON state circle
+        // Initially fully transparent and the same size as the OFF state circle
         mOnStateCircle = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mOnStateCircle.paint().setStrokeWidth(mAttrOnStateButtonStrokeWidth);
         mOnStateCircle.paint().setColor(mAttrOnStateButtonColor);
-        mOnStateCircle.paint().setAlpha(255);
+        mOnStateCircle.paint().setAlpha(MIN_ALPHA);
         mOnStateCircle.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mOnStateCircle.paint().setStyle(Paint.Style.FILL);
 
-//        mAlphaIncrement = 2;
-//        mAlphaIncrement = 255 / (
-//                (mOnStateCircle.getRadius() - mOffStateCircle.getRadius()) / EXPAND_INCREMENT);
+        // The Ripple effect
+        mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
+        mRipple.paint().setStrokeWidth(2.0f);
+        mRipple.paint().setColor(getResources().getColor(R.color.LightGreenLight));
+        mRipple.paint().setAlpha(MAX_ALPHA);
+        mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
+        mRipple.paint().setStyle(Paint.Style.STROKE);
+
+        // Compute alpha value interpolation
+        mAlphaIncrement = (int)Math.ceil(
+                (double)MAX_ALPHA / (double)(mAttrOnStateButtonSize - mAttrOffStateButtonSize));
+
+        mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
     }
 
     @Override
@@ -152,17 +167,20 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         if (mOnStateCircle != null) {
             mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
         }
+
+        if (mRipple != null) {
+            mRipple.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
+        }
     }
 
     /**
-     * runAnimation
+     * runToggleAnimation
      */
     @Override
-    public void runAnimation() {
+    public void runToggleAnimation() {
 
         // TODO: prevent new thread from starting again until animation cycle completes
-
-        (new Thread(new AnimationRunnable())).start();
+        (new Thread(new ToggleAnimationRunnable(this))).start();
     }
 
     /**
@@ -173,47 +191,59 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         super.onDraw(canvas);
 
         // Draw the OFF circle
-        if (mOffStateCircle.getRadius() == mOnStateCircle.getRadius()) {
+        if (mOnStateCircle.getRadius() == mOffStateCircle.getRadius()) {
+
+            mOffStateCircle.paint().setColor(getResources().getColor(R.color.LightGreenLight));
+            mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
             canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
                     mOffStateCircle.getRadius(), mOffStateCircle.paint());
         } else {
 
+            // Draw the ON circle
             synchronized (mOnStateCircle) {
-
-                mOnStateCircle.paint().setStyle(Paint.Style.STROKE);
-                mOnStateCircle.paint().setAlpha(50);
-                mOnStateCircle.paint().setColor(mAttrOnStateButtonStrokeColor);
                 canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
                         mOnStateCircle.getRadius(), mOnStateCircle.paint());
-
-                // Draw the ON circle button fill
-                mOnStateCircle.paint().setStyle(Paint.Style.FILL);
-                mOnStateCircle.paint().setColor(mAttrOnStateButtonColor);
-                mOnStateCircle.paint().setAlpha(255);
-                canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
-                        mOnStateCircle.getRadius(), mOnStateCircle.paint());
-
-
             }
+            mOffStateCircle.paint().setColor(getResources().getColor(R.color.LightGreenLight));
+            mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
+
+            // Draw the ripple effect
         }
+
+        // Always draw signal icon
+        canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2), ((getHeight() - mBitmap.getHeight()) / 2), null);
+    }
+
+    @Override
+    public void onToggleAnimationEnd() {
+        Log.d("testing", "onToggleAnimationEnd!!!!!");
     }
 
     /**
-     * Inner class AnimationRunnable
+     * Inner class ToggleAnimationRunnable
      */
-    private class AnimationRunnable implements Runnable {
+    private class ToggleAnimationRunnable implements Runnable {
+
+        private final AnimationStateListener mAnimationStateListener;
+
+        public ToggleAnimationRunnable(final AnimationStateListener listener) {
+            mAnimationStateListener = listener;
+        }
 
         public void run() {
 
-            Log.d("testing", "Run - start radius is " + Integer.toString(mOnStateCircle.getRadius()));
-
             boolean isExpanding;
 
+            /**
+             * Class constructor
+             */
             synchronized (mOnStateCircle) {
                 isExpanding = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
             }
 
-            while (keepRunning(isExpanding, mAttrOnStateButtonSize)) {
+            while (keepRunning(isExpanding)) {
 
                 synchronized (mOnStateCircle) {
 
@@ -222,31 +252,50 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
                     if (isExpanding) {
                         mOnStateCircle.setRadius(currentRadius + EXPAND_INCREMENT);
-                        //mOnStateCircle.paint().setAlpha(currentFillAlpha + mAlphaIncrement);
+
+                        // Prevent alpha value overflow
+                        if ((currentFillAlpha + mAlphaIncrement) <= MAX_ALPHA) {
+                            mOnStateCircle.paint().setAlpha((currentFillAlpha + mAlphaIncrement));
+                        }
                     } else {
                         mOnStateCircle.setRadius(currentRadius - EXPAND_INCREMENT);
-                        //mOnStateCircle.paint().setAlpha(currentFillAlpha - mAlphaIncrement);
+
+                        // Prevent alpha value overflow
+                        if ((currentFillAlpha - mAlphaIncrement) >= MIN_ALPHA) {
+                            mOnStateCircle.paint().setAlpha((currentFillAlpha - mAlphaIncrement));
+                        }
                     }
                 }
                 postInvalidate();
                 SystemClock.sleep(FILL_DELAY_MS);
             }
-            Log.d("testing", "Run - end radius is " + Integer.toString(mOnStateCircle.getRadius()));
+            // Notify animation end listeners
+            mAnimationStateListener.onToggleAnimationEnd();
         }
 
-        private boolean keepRunning(boolean isExpanding, int size) {
+        private boolean keepRunning(boolean isExpanding) {
 
             boolean result;
 
             synchronized (mOnStateCircle) {
                 if (isExpanding) {
-                    result = mOnStateCircle.getRadius() < size;
+                    result = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
                 } else {
-                    result = mOnStateCircle.getRadius() > mOffStateCircle.getRadius();
+                    result = mOnStateCircle.getRadius() > mAttrOffStateButtonSize;
                 }
             }
             return result;
         }
     }
 
+    /**
+     * Inner class RippleAnimationRunnable
+     */
+    private class RippleAnimationRunnable implements Runnable {
+
+        public void run() {
+
+        }
+
+    }
 }

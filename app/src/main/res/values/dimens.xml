@@ -5,7 +5,7 @@
 
     <dimen name="button_off_size">48dp</dimen>
     <dimen name="button_off_strokeSize">2dp</dimen>
-    <dimen name="button_on_size">60dp</dimen>
+    <dimen name="button_on_size">96dp</dimen>
     <dimen name="button_on_strokeSize">10dp</dimen>
 
 

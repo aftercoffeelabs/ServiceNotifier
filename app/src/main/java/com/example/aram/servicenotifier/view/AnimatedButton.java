@@ -14,7 +14,16 @@ public interface AnimatedButton {
     public void init(final Context context, AttributeSet attrs);
 
     /**
-     * Start animation
+     * Interface definition for starting button toggle animation
      */
-    public void runAnimation();
+    public void runToggleAnimation();
+
+    /**
+     * Interface definition for a callback to be invoked when the toggle animation ends
+     */
+    public interface AnimationStateListener {
+
+        // Called when the button toggle animation ends
+        void onToggleAnimationEnd();
+    }
 }

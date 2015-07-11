@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="OffButtonGray">#95a5a6</color>
-    <color name="OnButtonGreen">#2ecc71</color>
-    <color name="OnButtonStrokeColor">#c0392b</color>
-    <color name="BackgroundBlue">#2c3e50</color>
+
+    <color name="White">#FFFFFF</color>
+    <color name="GrayLight">#FAFAFA</color>
+    <color name="GrayMedium">#E0E0E0</color>
+    <color name="grey_50">#FAFAFA</color>
+
+    <!-- LIGHT GREEN: Primary -->
+    <color name="LightGreenLight">#DCEDC8</color>
+    <color name="LightGreenMedium">#8BC34A</color>
+    <color name="LightGreenDark">#558B2F</color>
+
+    <!-- ACCENT -->
+    <color name="AccentMedium">#4a8bc3</color>
 
 </resources>
