@@ -1,15 +1,19 @@
 package com.example.aram.servicenotifier.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.util.CirclePropertyHolder;
@@ -24,13 +28,16 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
      * Member variables
      */
     private static final int EXPAND_INCREMENT = 1;
-    private static final int FILL_DELAY_MS  = 2;
+    private static final int FILL_DELAY_MS  = 4;
+    private static final int RIPPLE_DELAY_MS = 20;
     private static final int MIN_ALPHA = 0;
     private static final int MAX_ALPHA = 255;
 
-    private boolean mButtonOn;
+    private volatile boolean mStopRippleAnimation; // volatile ensure atomic access
 
+    private boolean mButtonOn;
     private int mAlphaIncrement;
+    private int mRippleStartAlpha;
 
     // Default values to be overridden by xml attributes
     private int mAttrOffStateButtonSize = 100;
@@ -66,8 +73,15 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         if (v.getId() == R.id.control_button) {
 
-            // Toggle state
+            // Toggle button state
             mButtonOn = !mButtonOn;
+
+            // Toggle ripple animation
+            mStopRippleAnimation = !mButtonOn;
+            if (mStopRippleAnimation) {
+                resetRippleAnimation();
+            }
+
             runToggleAnimation();
         }
     }
@@ -122,14 +136,15 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         mOnStateCircle.paint().setStyle(Paint.Style.FILL);
 
         // The Ripple effect
+        mRippleStartAlpha = (Math.abs(mAttrOnStateButtonSize - mAttrOffStateButtonSize))%MAX_ALPHA;
         mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
-        mRipple.paint().setStrokeWidth(2.0f);
-        mRipple.paint().setColor(getResources().getColor(R.color.LightGreenLight));
-        mRipple.paint().setAlpha(MAX_ALPHA);
+        mRipple.paint().setStrokeWidth(4.0f);
+        mRipple.paint().setColor(getResources().getColor(R.color.light_green_100));
+        mRipple.paint().setAlpha(mRippleStartAlpha);
         mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mRipple.paint().setStyle(Paint.Style.STROKE);
 
-        // Compute alpha value interpolation
+        // Compute alpha value interpolation for the ON circle
         mAlphaIncrement = (int)Math.ceil(
                 (double)MAX_ALPHA / (double)(mAttrOnStateButtonSize - mAttrOffStateButtonSize));
 
@@ -183,6 +198,22 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         (new Thread(new ToggleAnimationRunnable(this))).start();
     }
 
+    @Override
+    public void onToggleAnimationEnd() {
+
+        // Start looping the ripple effect animation
+        (new Thread(new RippleAnimationRunnable())).start();
+    }
+
+    private void resetRippleAnimation() {
+        synchronized (mRipple) {
+            if (mRipple != null) {
+                mRipple.paint().setAlpha(mRippleStartAlpha);
+                mRipple.setRadius(mAttrOffStateButtonSize);
+            }
+        }
+    }
+
     /**
      * onDraw
      */
@@ -190,13 +221,23 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw the OFF circle
-        if (mOnStateCircle.getRadius() == mOffStateCircle.getRadius()) {
+        int offRadius;
+        int onRadius;
 
-            mOffStateCircle.paint().setColor(getResources().getColor(R.color.LightGreenLight));
-            mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
-            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
-                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
+        synchronized (mOffStateCircle) {
+            offRadius = mOffStateCircle.getRadius();
+            onRadius = mOnStateCircle.getRadius();
+        }
+
+        // Draw the OFF circle
+        if (onRadius == offRadius) {
+
+            synchronized (mOffStateCircle) {
+                mOffStateCircle.paint().setColor(getResources().getColor(R.color.light_green_100));
+                mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
+                canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                        mOffStateCircle.getRadius(), mOffStateCircle.paint());
+            }
         } else {
 
             // Draw the ON circle
@@ -204,25 +245,27 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
                 canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
                         mOnStateCircle.getRadius(), mOnStateCircle.paint());
             }
-            mOffStateCircle.paint().setColor(getResources().getColor(R.color.LightGreenLight));
-            mOffStateCircle.paint().setStyle(Paint.Style.FILL);
-            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
-                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
+            synchronized (mOffStateCircle) {
+                mOffStateCircle.paint().setColor(getResources().getColor(R.color.light_green_100));
+                mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+                canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                        mOffStateCircle.getRadius(), mOffStateCircle.paint());
+            }
 
             // Draw the ripple effect
+            synchronized (mRipple) {
+                canvas.drawCircle(mRipple.getCenterX(), mRipple.getCenterY(),
+                        mRipple.getRadius(), mRipple.paint());
+            }
         }
 
         // Always draw signal icon
-        canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2), ((getHeight() - mBitmap.getHeight()) / 2), null);
-    }
-
-    @Override
-    public void onToggleAnimationEnd() {
-        Log.d("testing", "onToggleAnimationEnd!!!!!");
+        canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2),
+                ((getHeight() - mBitmap.getHeight()) / 2), null);
     }
 
     /**
-     * Inner class ToggleAnimationRunnable
+     * Inner Class ToggleAnimationRunnable
      */
     private class ToggleAnimationRunnable implements Runnable {
 
@@ -295,7 +338,28 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         public void run() {
 
-        }
+            int currentFillAlpha;
 
+            // Alpha won't start at 255, instead start at difference between ON/OFF
+            // circles and go to 0. We willl use an alpha increment of 1 for the ripple.
+            while (!mStopRippleAnimation) {
+
+                synchronized (mRipple) {
+
+                    currentFillAlpha = mRipple.paint().getAlpha();
+
+                    if (currentFillAlpha <= MIN_ALPHA) {
+                        mRipple.paint().setAlpha(mRippleStartAlpha);
+                    } else {
+                        mRipple.paint().setAlpha((currentFillAlpha - 1));
+                    }
+
+                    mRipple.setRadius((mRipple.getRadius() + EXPAND_INCREMENT) % mAttrOnStateButtonSize);
+
+                }
+                postInvalidate();
+                SystemClock.sleep(RIPPLE_DELAY_MS);
+            }
+        }
     }
 }

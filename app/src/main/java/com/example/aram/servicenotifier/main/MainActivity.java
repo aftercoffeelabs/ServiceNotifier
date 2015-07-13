@@ -56,6 +56,37 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // TODO: resume animation thread here
+        //mPresenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+
+        // TODO: kill animation thread here
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // TODO: kill animation thread here
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        // TODO: kill animation thread here
+        //mPresenter = null;
+    }
+
+    @Override
     public void showMessage(String message) {
 
     }
