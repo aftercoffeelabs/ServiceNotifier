@@ -10,9 +10,9 @@
 
     <!-- ActionBar styles -->
     <style name="TheActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/light_green_500</item>
+        <item name="android:background">@color/light_green_600</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@color/light_green_500</item>
+        <item name="background">@color/light_green_600</item>
     </style>
 </resources>

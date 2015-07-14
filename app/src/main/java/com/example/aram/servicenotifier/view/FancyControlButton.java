@@ -1,19 +1,15 @@
 package com.example.aram.servicenotifier.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Outline;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.util.CirclePropertyHolder;
@@ -29,15 +25,15 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
      */
     private static final int EXPAND_INCREMENT = 1;
     private static final int FILL_DELAY_MS  = 4;
-    private static final int RIPPLE_DELAY_MS = 20;
+    private static final int RIPPLE_DELAY_MS = 33;
     private static final int MIN_ALPHA = 0;
     private static final int MAX_ALPHA = 255;
 
-    private volatile boolean mStopRippleAnimation; // volatile ensure atomic access
+    private volatile boolean mStopRippleAnimation;
 
     private boolean mButtonOn;
-    private int mAlphaIncrement;
-    private int mRippleStartAlpha;
+    private int mFillAlphaIncrement;
+    private int mRippleAlphaBegin;
 
     // Default values to be overridden by xml attributes
     private int mAttrOffStateButtonSize = 100;
@@ -136,16 +132,17 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         mOnStateCircle.paint().setStyle(Paint.Style.FILL);
 
         // The Ripple effect
-        mRippleStartAlpha = (Math.abs(mAttrOnStateButtonSize - mAttrOffStateButtonSize))%MAX_ALPHA;
+        mRippleAlphaBegin = (MAX_ALPHA - (mAttrOnStateButtonSize - mAttrOffStateButtonSize)) % MAX_ALPHA;
+
         mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mRipple.paint().setStrokeWidth(4.0f);
         mRipple.paint().setColor(getResources().getColor(R.color.light_green_100));
-        mRipple.paint().setAlpha(mRippleStartAlpha);
+        mRipple.paint().setAlpha(mRippleAlphaBegin);
         mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mRipple.paint().setStyle(Paint.Style.STROKE);
 
-        // Compute alpha value interpolation for the ON circle
-        mAlphaIncrement = (int)Math.ceil(
+        // Compute alpha value interpolation for the ON circle fill
+        mFillAlphaIncrement = (int)Math.ceil(
                 (double)MAX_ALPHA / (double)(mAttrOnStateButtonSize - mAttrOffStateButtonSize));
 
         mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
@@ -168,7 +165,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         int viewHeight = h - padY;
 
         // Max size of circle to fit within View
-        int diameter = (int)Math.min(viewWidth, viewHeight);
+        int diameter = Math.min(viewWidth, viewHeight);
 
         // Get center of view
         int centerX = w / 2;
@@ -205,12 +202,11 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         (new Thread(new RippleAnimationRunnable())).start();
     }
 
-    private void resetRippleAnimation() {
-        synchronized (mRipple) {
-            if (mRipple != null) {
-                mRipple.paint().setAlpha(mRippleStartAlpha);
-                mRipple.setRadius(mAttrOffStateButtonSize);
-            }
+    private synchronized void resetRippleAnimation() {
+
+        if (mRipple != null) {
+            mRipple.paint().setAlpha(mRippleAlphaBegin);
+            mRipple.setRadius(mAttrOffStateButtonSize);
         }
     }
 
@@ -218,45 +214,37 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
      * onDraw
      */
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         int offRadius;
         int onRadius;
 
-        synchronized (mOffStateCircle) {
-            offRadius = mOffStateCircle.getRadius();
-            onRadius = mOnStateCircle.getRadius();
-        }
+        offRadius = mOffStateCircle.getRadius();
+        onRadius = mOnStateCircle.getRadius();
 
         // Draw the OFF circle
         if (onRadius == offRadius) {
 
-            synchronized (mOffStateCircle) {
-                mOffStateCircle.paint().setColor(getResources().getColor(R.color.light_green_100));
-                mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
-                canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
-                        mOffStateCircle.getRadius(), mOffStateCircle.paint());
-            }
+            mOffStateCircle.paint().setColor(mAttrOffStateButtonColor);
+            mOffStateCircle.paint().setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
+
         } else {
 
             // Draw the ON circle
-            synchronized (mOnStateCircle) {
-                canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
-                        mOnStateCircle.getRadius(), mOnStateCircle.paint());
-            }
-            synchronized (mOffStateCircle) {
-                mOffStateCircle.paint().setColor(getResources().getColor(R.color.light_green_100));
-                mOffStateCircle.paint().setStyle(Paint.Style.FILL);
-                canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
-                        mOffStateCircle.getRadius(), mOffStateCircle.paint());
-            }
+            canvas.drawCircle(mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY(),
+                    mOnStateCircle.getRadius(), mOnStateCircle.paint());
+
+            mOffStateCircle.paint().setColor(mAttrOffStateButtonColor);
+            mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+            canvas.drawCircle(mOffStateCircle.getCenterX(), mOffStateCircle.getCenterY(),
+                    mOffStateCircle.getRadius(), mOffStateCircle.paint());
 
             // Draw the ripple effect
-            synchronized (mRipple) {
-                canvas.drawCircle(mRipple.getCenterX(), mRipple.getCenterY(),
-                        mRipple.getRadius(), mRipple.paint());
-            }
+            canvas.drawCircle(mRipple.getCenterX(), mRipple.getCenterY(),
+                    mRipple.getRadius(), mRipple.paint());
         }
 
         // Always draw signal icon
@@ -279,36 +267,29 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
             boolean isExpanding;
 
-            /**
-             * Class constructor
-             */
-            synchronized (mOnStateCircle) {
-                isExpanding = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
-            }
+            isExpanding = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
 
             while (keepRunning(isExpanding)) {
 
-                synchronized (mOnStateCircle) {
+                int currentRadius = mOnStateCircle.getRadius();
+                int currentFillAlpha = mOnStateCircle.paint().getAlpha();
 
-                    int currentRadius = mOnStateCircle.getRadius();
-                    int currentFillAlpha = mOnStateCircle.paint().getAlpha();
+                if (isExpanding) {
+                    mOnStateCircle.setRadius(currentRadius + EXPAND_INCREMENT);
 
-                    if (isExpanding) {
-                        mOnStateCircle.setRadius(currentRadius + EXPAND_INCREMENT);
+                    // Prevent alpha value overflow
+                    if ((currentFillAlpha + mFillAlphaIncrement) <= MAX_ALPHA) {
+                        mOnStateCircle.paint().setAlpha((currentFillAlpha + mFillAlphaIncrement));
+                    }
+                } else {
+                    mOnStateCircle.setRadius(currentRadius - EXPAND_INCREMENT);
 
-                        // Prevent alpha value overflow
-                        if ((currentFillAlpha + mAlphaIncrement) <= MAX_ALPHA) {
-                            mOnStateCircle.paint().setAlpha((currentFillAlpha + mAlphaIncrement));
-                        }
-                    } else {
-                        mOnStateCircle.setRadius(currentRadius - EXPAND_INCREMENT);
-
-                        // Prevent alpha value overflow
-                        if ((currentFillAlpha - mAlphaIncrement) >= MIN_ALPHA) {
-                            mOnStateCircle.paint().setAlpha((currentFillAlpha - mAlphaIncrement));
-                        }
+                    // Prevent alpha value overflow
+                    if ((currentFillAlpha - mFillAlphaIncrement) >= MIN_ALPHA) {
+                        mOnStateCircle.paint().setAlpha((currentFillAlpha - mFillAlphaIncrement));
                     }
                 }
+
                 postInvalidate();
                 SystemClock.sleep(FILL_DELAY_MS);
             }
@@ -316,17 +297,16 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
             mAnimationStateListener.onToggleAnimationEnd();
         }
 
-        private boolean keepRunning(boolean isExpanding) {
+        private synchronized boolean keepRunning(boolean isExpanding) {
 
             boolean result;
 
-            synchronized (mOnStateCircle) {
-                if (isExpanding) {
-                    result = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
-                } else {
-                    result = mOnStateCircle.getRadius() > mAttrOffStateButtonSize;
-                }
+            if (isExpanding) {
+                result = mOnStateCircle.getRadius() < mAttrOnStateButtonSize;
+            } else {
+                result = mOnStateCircle.getRadius() > mAttrOffStateButtonSize;
             }
+
             return result;
         }
     }
@@ -338,25 +318,35 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
         public void run() {
 
-            int currentFillAlpha;
+            int currentAlpha;
+            int currentRadius;
+            int newRadius;
 
-            // Alpha won't start at 255, instead start at difference between ON/OFF
-            // circles and go to 0. We willl use an alpha increment of 1 for the ripple.
             while (!mStopRippleAnimation) {
 
-                synchronized (mRipple) {
+//                currentAlpha = mRipple.paint().getAlpha();
+//
+//                if (currentAlpha <= MIN_ALPHA) {
+//                    mRipple.paint().setAlpha(MIN_ALPHA);
+//                } else {
+//                    mRipple.paint().setAlpha((currentAlpha - mFillAlphaIncrement));
+//                }
 
-                    currentFillAlpha = mRipple.paint().getAlpha();
+                currentRadius = mRipple.getRadius();
+                newRadius = currentRadius + EXPAND_INCREMENT;
 
-                    if (currentFillAlpha <= MIN_ALPHA) {
-                        mRipple.paint().setAlpha(mRippleStartAlpha);
-                    } else {
-                        mRipple.paint().setAlpha((currentFillAlpha - 1));
-                    }
+                if (newRadius <= mAttrOnStateButtonSize) {
+                    // Keep expanding ripple out
+                    mRipple.setRadius(newRadius);
+                    mRipple.paint().setAlpha(mRipple.paint().getAlpha() + 1);
+                } else {
+                    // Go back to starting position
+                    mRipple.setRadius(mAttrOffStateButtonSize); // call resetRipple instead?
 
-                    mRipple.setRadius((mRipple.getRadius() + EXPAND_INCREMENT) % mAttrOnStateButtonSize);
-
+                    //TODO: consider adding delay before sending ripple out again
                 }
+                Log.d("testing", Integer.toString(mRipple.paint().getAlpha()));
+
                 postInvalidate();
                 SystemClock.sleep(RIPPLE_DELAY_MS);
             }

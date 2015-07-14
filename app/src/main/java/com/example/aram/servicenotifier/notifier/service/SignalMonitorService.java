@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -51,7 +52,8 @@ public class SignalMonitorService extends Service {
 
         Log.d("testing", "Service - onStartCommand");
 
-        mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE);
+        mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE |
+                PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
         // If we get killed, after returning from here, restart with null intent
         return START_STICKY;
@@ -120,6 +122,17 @@ public class SignalMonitorService extends Service {
             // Debug logging
             Log.d("testing", stateStr);
             mLogger.log(stateStr);
+        }
+
+        @Override
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+
+            if (!signalStrength.isGsm()) {
+                Log.d("testing", Integer.toString(signalStrength.getCdmaDbm()));
+            } else {
+                Log.d("testing", Integer.toString(signalStrength.getGsmSignalStrength()));
+            }
         }
     }
 }

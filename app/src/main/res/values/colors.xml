@@ -8,10 +8,10 @@
 
     <!-- LIGHT GREEN: Primary -->
     <color name="light_green_100">#DCEDC8</color>
-    <color name="light_green_500">#8BC34A</color>
+    <color name="light_green_600">#7CB342</color>
     <color name="light_green_800">#558B2F</color>
 
     <!-- ACCENT -->
-    <color name="accent_medium">#4a8bc3</color>
+    <color name="accent_medium">#427cb3</color>
 
 </resources>
