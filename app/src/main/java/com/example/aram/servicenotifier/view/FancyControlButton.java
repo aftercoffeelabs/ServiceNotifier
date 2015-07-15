@@ -33,7 +33,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
 
     private boolean mButtonOn;
     private int mFillAlphaIncrement;
-    private int mRippleAlphaBegin;
+    private int mRippleAlphaIncrement;
 
     // Default values to be overridden by xml attributes
     private int mAttrOffStateButtonSize = 100;
@@ -132,18 +132,19 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         mOnStateCircle.paint().setStyle(Paint.Style.FILL);
 
         // The Ripple effect
-        mRippleAlphaBegin = (MAX_ALPHA - (mAttrOnStateButtonSize - mAttrOffStateButtonSize)) % MAX_ALPHA;
-
         mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mRipple.paint().setStrokeWidth(4.0f);
         mRipple.paint().setColor(getResources().getColor(R.color.light_green_100));
-        mRipple.paint().setAlpha(mRippleAlphaBegin);
+        mRipple.paint().setAlpha(MIN_ALPHA);
         mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mRipple.paint().setStyle(Paint.Style.STROKE);
 
-        // Compute alpha value interpolation for the ON circle fill
+        // Compute alpha value interpolation for the ON circle fill, ripple effect
         mFillAlphaIncrement = (int)Math.ceil(
-                (double)MAX_ALPHA / (double)(mAttrOnStateButtonSize - mAttrOffStateButtonSize));
+                (double) MAX_ALPHA / (double) (mAttrOnStateButtonSize - mAttrOffStateButtonSize));
+
+        mRippleAlphaIncrement = (int)Math.floor(
+                (double)MAX_ALPHA / (double)((mAttrOnStateButtonSize - mAttrOffStateButtonSize) / 2));
 
         mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
     }
@@ -205,7 +206,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     private synchronized void resetRippleAnimation() {
 
         if (mRipple != null) {
-            mRipple.paint().setAlpha(mRippleAlphaBegin);
+            mRipple.paint().setAlpha(MIN_ALPHA);
             mRipple.setRadius(mAttrOffStateButtonSize);
         }
     }
@@ -321,16 +322,9 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
             int currentAlpha;
             int currentRadius;
             int newRadius;
+            int sign = 1; // start positive
 
             while (!mStopRippleAnimation) {
-
-//                currentAlpha = mRipple.paint().getAlpha();
-//
-//                if (currentAlpha <= MIN_ALPHA) {
-//                    mRipple.paint().setAlpha(MIN_ALPHA);
-//                } else {
-//                    mRipple.paint().setAlpha((currentAlpha - mFillAlphaIncrement));
-//                }
 
                 currentRadius = mRipple.getRadius();
                 newRadius = currentRadius + EXPAND_INCREMENT;
@@ -338,14 +332,21 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
                 if (newRadius <= mAttrOnStateButtonSize) {
                     // Keep expanding ripple out
                     mRipple.setRadius(newRadius);
-                    mRipple.paint().setAlpha(mRipple.paint().getAlpha() + 1);
+
+                    currentAlpha = mRipple.paint().getAlpha();
+
+                    // At halfway point of radius expansion, flip the sign to decrease the alpha
+                    sign = (currentRadius >= (
+                            mAttrOnStateButtonSize + mAttrOffStateButtonSize) / 2) ? -1 : 1;
+
+                    mRipple.paint().setAlpha(currentAlpha + (sign * mRippleAlphaIncrement));
                 } else {
                     // Go back to starting position
                     mRipple.setRadius(mAttrOffStateButtonSize); // call resetRipple instead?
 
-                    //TODO: consider adding delay before sending ripple out again
+                    // Delay before sending ripple out again
+                    //SystemClock.sleep(500);
                 }
-                Log.d("testing", Integer.toString(mRipple.paint().getAlpha()));
 
                 postInvalidate();
                 SystemClock.sleep(RIPPLE_DELAY_MS);
