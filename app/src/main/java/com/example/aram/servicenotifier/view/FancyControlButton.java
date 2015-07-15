@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
@@ -75,7 +74,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
             // Toggle ripple animation
             mStopRippleAnimation = !mButtonOn;
             if (mStopRippleAnimation) {
-                resetRippleAnimation();
+                resetRipple();
             }
 
             runToggleAnimation();
@@ -203,7 +202,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         (new Thread(new RippleAnimationRunnable())).start();
     }
 
-    private synchronized void resetRippleAnimation() {
+    private void resetRipple() {
 
         if (mRipple != null) {
             mRipple.paint().setAlpha(MIN_ALPHA);
@@ -215,7 +214,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
      * onDraw
      */
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         int offRadius;
@@ -298,7 +297,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
             mAnimationStateListener.onToggleAnimationEnd();
         }
 
-        private synchronized boolean keepRunning(boolean isExpanding) {
+        private boolean keepRunning(boolean isExpanding) {
 
             boolean result;
 
@@ -342,7 +341,7 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
                     mRipple.paint().setAlpha(currentAlpha + (sign * mRippleAlphaIncrement));
                 } else {
                     // Go back to starting position
-                    mRipple.setRadius(mAttrOffStateButtonSize); // call resetRipple instead?
+                    resetRipple();
 
                     // Delay before sending ripple out again
                     //SystemClock.sleep(500);
