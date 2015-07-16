@@ -133,15 +133,16 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         // The Ripple effect
         mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
         mRipple.paint().setStrokeWidth(4.0f);
-        mRipple.paint().setColor(getResources().getColor(R.color.light_green_100));
+        mRipple.paint().setColor(getResources().getColor(R.color.light_green_200));
         mRipple.paint().setAlpha(MIN_ALPHA);
         mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
         mRipple.paint().setStyle(Paint.Style.STROKE);
 
-        // Compute alpha value interpolation for the ON circle fill, ripple effect
+        // Compute alpha value interpolation for the ON circle fill
         mFillAlphaIncrement = (int)Math.ceil(
                 (double) MAX_ALPHA / (double) (mAttrOnStateButtonSize - mAttrOffStateButtonSize));
 
+        // Compute alpha value interpolation for the ripple effect
         mRippleAlphaIncrement = (int)Math.floor(
                 (double)MAX_ALPHA / (double)((mAttrOnStateButtonSize - mAttrOffStateButtonSize) / 2));
 

@@ -6,27 +6,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303030">
+    android:background="@color/light_green_900">
 
     <com.example.aram.servicenotifier.view.FancyControlButton
         android:id="@+id/control_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:offStateColor="@color/light_green_100"
+        app:offStateColor="@color/light_green_200"
         app:offStateSize="@dimen/button_off_size"
         app:offStateStrokeWidth="@dimen/button_off_strokeSize"
         app:onStateColor="@color/light_green_600"
         app:onStateSize="@dimen/button_on_size"
         app:onStateStrokeWidth="@dimen/button_on_strokeSize"
         app:onStateStrokeColor="@color/accent_medium"
-        android:layout_weight="4"
+        android:layout_weight="0.75"
         android:elevation="2dp"/>
 
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Debug Mode"
-        android:id="@+id/debug_button"
-        android:layout_weight="1"
+        android:id="@+id/status_msg"
+        android:layout_weight="0.25"
         android:elevation="2dp"/>
 </LinearLayout>

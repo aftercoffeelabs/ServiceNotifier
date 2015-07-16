@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
@@ -44,7 +43,7 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_debug) {
             return true;
         }
 

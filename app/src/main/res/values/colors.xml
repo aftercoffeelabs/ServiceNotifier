@@ -5,11 +5,14 @@
 
     <color name="grey_50">#FAFAFA</color>
     <color name="grey_300">#E0E0E0</color>
+    <color name="grey_900">#212121</color>
+    <color name="grey_background">#303030</color>
 
     <!-- LIGHT GREEN: Primary -->
-    <color name="light_green_100">#DCEDC8</color>
+    <color name="light_green_200">#C5E1A5</color>
     <color name="light_green_600">#7CB342</color>
     <color name="light_green_800">#558B2F</color>
+    <color name="light_green_900">#33691E</color>
 
     <!-- ACCENT -->
     <color name="accent_medium">#427cb3</color>

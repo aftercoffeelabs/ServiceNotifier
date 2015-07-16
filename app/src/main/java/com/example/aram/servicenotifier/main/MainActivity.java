@@ -3,8 +3,6 @@ package com.example.aram.servicenotifier.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +18,7 @@ import butterknife.InjectView;
  */
 public class MainActivity extends ActionBarActivity implements MainView, View.OnClickListener {
 
-    @InjectView(R.id.debug_button) Button mDebugButton;
+//    @InjectView(R.id.status_msg) Button mDebugButton;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,11 +34,14 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_debug:
+                startActivity(new Intent(this, DebugActivity.class));
+                break;
+            case R.id.action_about:
+                // TODO
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -52,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         ButterKnife.inject(this);
 
-        mDebugButton.setOnClickListener(this);
+//        mDebugButton.setOnClickListener(this);
     }
 
     @Override
@@ -99,7 +100,5 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(this, DebugActivity.class);
-        startActivity(intent);
     }
 }
