@@ -6,9 +6,15 @@
     <string name="action_about">About</string>
 
     <string name="notification_title">Phone Service Alert</string>
-    <string name="notification_content_in_service">Your service has been restored.</string>
-    <string name="notification_content_out_service">Your phone is out of service.</string>
-    <string name="notification_content_emergency">You can only make emergency calls..</string>
-    <string name="notification_content_unknown">Unable to determine your service state.</string>
+    <string name="notification_content_in_service">Your service has been restored</string>
+    <string name="notification_content_out_service">Your phone is out of service</string>
+    <string name="notification_content_emergency">You can only make emergency calls</string>
+    <string name="notification_content_unknown">Unable to determine your service state</string>
+
+    <string name="hint_tap_on_message">Tap to turn on notifications</string>
+    <string name="hint_tap_off_message">Tap to turn off notifications</string>
+
+    <string name="notification_state_on_message">Notifications are on</string>
+    <string name="notification_state_off_message">Notifications are off</string>
 
 </resources>

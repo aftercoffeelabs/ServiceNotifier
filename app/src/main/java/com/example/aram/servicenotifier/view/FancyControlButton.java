@@ -16,7 +16,7 @@ import com.example.aram.servicenotifier.util.CirclePropertyHolder;
 /**
  * Class FancyControlButton
  */
-public class FancyControlButton extends View implements AnimatedButton, View.OnClickListener,
+public class FancyControlButton extends View implements AnimatedButton,
         AnimatedButton.AnimationStateListener {
 
     /**
@@ -57,29 +57,29 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         super(context, attrs);
         init(context, attrs);
 
-        setOnClickListener(this);
+//        setOnClickListener(this);
     }
 
-    /**
-     * onClick
-     */
-    @Override
-    public void onClick(View v) {
-
-        if (v.getId() == R.id.control_button) {
-
-            // Toggle button state
-            mButtonOn = !mButtonOn;
-
-            // Toggle ripple animation
-            mStopRippleAnimation = !mButtonOn;
-            if (mStopRippleAnimation) {
-                resetRipple();
-            }
-
-            runToggleAnimation();
-        }
-    }
+//    /**
+//     * onClick
+//     */
+//    @Override
+//    public void onClick(View v) {
+//
+//        if (v.getId() == R.id.mainView_control_button) {
+//
+//            // Toggle button state
+//            mButtonOn = !mButtonOn;
+//
+//            // Toggle ripple animation
+//            mStopRippleAnimation = !mButtonOn;
+//            if (mStopRippleAnimation) {
+//                resetRipple();
+//            }
+//
+//            clicked();
+//        }
+//    }
 
     /**
      * init
@@ -187,15 +187,35 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
     }
 
     /**
-     * runToggleAnimation
+     * clicked
      */
     @Override
-    public void runToggleAnimation() {
+    public void clicked() {
+
+            // Toggle button state
+            mButtonOn = !mButtonOn;
+
+            // Toggle ripple animation
+            mStopRippleAnimation = !mButtonOn;
+            if (mStopRippleAnimation) {
+                resetRipple();
+            }
+
+        startAnimation();
+    }
+
+    /**
+     * startAnimation
+     */
+    private void startAnimation() {
 
         // TODO: prevent new thread from starting again until animation cycle completes
         (new Thread(new ToggleAnimationRunnable(this))).start();
     }
 
+    /**
+     * onToggleAnimationEnd
+     */
     @Override
     public void onToggleAnimationEnd() {
 
@@ -203,6 +223,9 @@ public class FancyControlButton extends View implements AnimatedButton, View.OnC
         (new Thread(new RippleAnimationRunnable())).start();
     }
 
+    /**
+     * resetRipple
+     */
     private void resetRipple() {
 
         if (mRipple != null) {

@@ -111,15 +111,20 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
     }
 
     @Override
-    public void showMessage(String message) {
+    public void playButtonAnimation() {
+        // Do nothing for DebugActivity
+    }
+
+    @Override
+    public void setHintMessage(String message) {
 
         //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void setButtonText(boolean value) {
+    public void setStateMessage(String message) {
 
-        if(value == true) {
+        if(true == true) {
             mStartButton.setText("STOP");   // When service is running
             mTextView.setText("Service is Running");
         } else {

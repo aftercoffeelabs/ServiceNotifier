@@ -16,12 +16,12 @@ public interface AnimatedButton {
     /**
      * Interface definition for starting button toggle animation
      */
-    public void runToggleAnimation();
+    void clicked();
 
     /**
      * Interface definition for a callback to be invoked when the toggle animation ends
      */
-    public interface AnimationStateListener {
+    interface AnimationStateListener {
 
         // Called when the button toggle animation ends
         void onToggleAnimationEnd();

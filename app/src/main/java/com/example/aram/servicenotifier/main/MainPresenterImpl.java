@@ -1,11 +1,13 @@
 package com.example.aram.servicenotifier.main;
 
+import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.OnNotificationStateChangeListener;
 import com.example.aram.servicenotifier.notifier.service.ServiceInteractor;
 import com.example.aram.servicenotifier.notifier.service.ServiceInteractorImpl;
 
 /**
- * Created by Aram on 5/30/2015.
+ * Class MainPresenterImpl
  */
 public class MainPresenterImpl implements MainPresenter, OnNotificationStateChangeListener {
 
@@ -21,25 +23,35 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
     public void toggleNotificationState() {
 
         mServiceInteractor.toggleState(this);
+        mMainView.playButtonAnimation();
     }
 
     @Override
     public void resume() {
 
         // Need to know the service state to properly set
-        // the start/stop button text
+        // the hint and state messages
         boolean status = mServiceInteractor.isServiceRunning();
-        mMainView.setButtonText(status);
+
+        if (status) {
+            onNotificationStateEnabled();
+        } else {
+            onNotificationStateDisabled();
+        }
     }
 
     @Override
     public void onNotificationStateEnabled() {
-        mMainView.setButtonText(true);
+
+        mMainView.setStateMessage(MyApp.getRes().getString(R.string.notification_state_on_message));
+        mMainView.setHintMessage(MyApp.getRes().getString(R.string.hint_tap_off_message));
     }
 
     @Override
     public void onNotificationStateDisabled() {
-        mMainView.setButtonText(false);
+
+        mMainView.setStateMessage(MyApp.getRes().getString(R.string.notification_state_off_message));
+        mMainView.setHintMessage(MyApp.getRes().getString(R.string.hint_tap_on_message));
     }
 
 }

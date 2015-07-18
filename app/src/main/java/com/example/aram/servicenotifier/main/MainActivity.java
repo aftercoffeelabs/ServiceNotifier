@@ -6,9 +6,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.view.FancyControlButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -19,6 +20,11 @@ import butterknife.InjectView;
 public class MainActivity extends ActionBarActivity implements MainView, View.OnClickListener {
 
 //    @InjectView(R.id.status_msg) Button mDebugButton;
+    @InjectView(R.id.mainView_control_button) FancyControlButton mControlButton;
+    @InjectView(R.id.mainView_hint_text) TextView mHintMessage;
+    @InjectView(R.id.mainView_state_text) TextView mStateMessage;
+
+    private MainPresenter mPresenter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,7 +59,11 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         ButterKnife.inject(this);
 
+        mPresenter = new MainPresenterImpl(this);
+
 //        mDebugButton.setOnClickListener(this);
+        mControlButton.setOnClickListener(this);
+
     }
 
     @Override
@@ -61,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         super.onResume();
 
         // TODO: resume animation thread here
-        //mPresenter.resume();
+        mPresenter.resume();
     }
 
     @Override
@@ -84,21 +94,33 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         super.onDestroy();
 
         // TODO: kill animation thread here
-        //mPresenter = null;
+        mPresenter = null;
     }
 
     @Override
-    public void showMessage(String message) {
-
+    public void playButtonAnimation() {
+        mControlButton.clicked();
     }
 
     @Override
-    public void setButtonText(boolean value) {
+    public void setHintMessage(String message) {
 
+        mHintMessage.setText(message);
+    }
+
+    @Override
+    public void setStateMessage(String message) {
+
+        mStateMessage.setText(message);
     }
 
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()) {
+            case R.id.mainView_control_button:
+                mPresenter.toggleNotificationState();
+                break;
+        }
     }
 }
