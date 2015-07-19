@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.125"
-        android:textSize="14sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/bright_foreground_material_dark"
         android:gravity="center"/>
 
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.125"
-        android:textSize="14sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="@color/hint_foreground_material_dark"
         android:gravity="center"/>
 

@@ -14,7 +14,7 @@
     <string name="hint_tap_on_message">Tap to turn on notifications</string>
     <string name="hint_tap_off_message">Tap to turn off notifications</string>
 
-    <string name="notification_state_on_message">Notifications are on</string>
-    <string name="notification_state_off_message">Notifications are off</string>
+    <string name="notification_state_on_message">Notifications enabled</string>
+    <string name="notification_state_off_message">Notifications disabled</string>
 
 </resources>

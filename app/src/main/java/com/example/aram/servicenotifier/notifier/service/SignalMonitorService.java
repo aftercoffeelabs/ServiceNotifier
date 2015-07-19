@@ -100,6 +100,8 @@ public class SignalMonitorService extends Service {
         @Override
         public void onServiceStateChanged(ServiceState state) {
 
+            // TODO: DO NOT HANDLE POWER_OFF messages!!!
+
             String stateStr = "";
             int stateCode = state.getState();
 
@@ -129,9 +131,9 @@ public class SignalMonitorService extends Service {
             super.onSignalStrengthsChanged(signalStrength);
 
             if (!signalStrength.isGsm()) {
-                Log.d("testing", Integer.toString(signalStrength.getCdmaDbm()));
+                //Log.d("testing", Integer.toString(signalStrength.getCdmaDbm()));
             } else {
-                Log.d("testing", Integer.toString(signalStrength.getGsmSignalStrength()));
+                //Log.d("testing", Integer.toString(signalStrength.getGsmSignalStrength()));
             }
         }
     }

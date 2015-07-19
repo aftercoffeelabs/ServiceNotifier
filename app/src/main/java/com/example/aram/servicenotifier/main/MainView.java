@@ -5,7 +5,11 @@ package com.example.aram.servicenotifier.main;
  */
 public interface MainView {
 
+    void setButtonOn(boolean isOn);
+
     void playButtonAnimation();
+
+    void stopButtonAnimation();
 
     void setHintMessage(String message);
 

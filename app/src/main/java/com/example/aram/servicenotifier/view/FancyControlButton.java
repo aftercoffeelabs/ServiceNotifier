@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
@@ -29,8 +30,10 @@ public class FancyControlButton extends View implements AnimatedButton,
     private static final int MAX_ALPHA = 255;
 
     private volatile boolean mStopRippleAnimation;
+    private volatile boolean mButtonOn;
 
-    private boolean mButtonOn;
+    private boolean mButtonStartPositionOn;
+
     private int mFillAlphaIncrement;
     private int mRippleAlphaIncrement;
 
@@ -56,30 +59,7 @@ public class FancyControlButton extends View implements AnimatedButton,
     public FancyControlButton (Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-
-//        setOnClickListener(this);
     }
-
-//    /**
-//     * onClick
-//     */
-//    @Override
-//    public void onClick(View v) {
-//
-//        if (v.getId() == R.id.mainView_control_button) {
-//
-//            // Toggle button state
-//            mButtonOn = !mButtonOn;
-//
-//            // Toggle ripple animation
-//            mStopRippleAnimation = !mButtonOn;
-//            if (mStopRippleAnimation) {
-//                resetRipple();
-//            }
-//
-//            clicked();
-//        }
-//    }
 
     /**
      * init
@@ -147,16 +127,23 @@ public class FancyControlButton extends View implements AnimatedButton,
                 (double)MAX_ALPHA / (double)((mAttrOnStateButtonSize - mAttrOffStateButtonSize) / 2));
 
         mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+
+        mButtonOn = false;
+        mStopRippleAnimation = true;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        Log.d("testing", "onMeasure");
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
+        Log.d("testing", "onSizeChanged");
 
         // Get view dimensions with padding factored in
         int padX = getPaddingLeft() + getPaddingRight();
@@ -184,6 +171,28 @@ public class FancyControlButton extends View implements AnimatedButton,
         if (mRipple != null) {
             mRipple.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
         }
+
+        // After view is initialized, check if the button needs to be automatically
+        // set to the ON position for the user. This happens in the case where the
+        // service is already running prior to the app starting
+        if (mButtonStartPositionOn == true && !mButtonOn) {
+            setOn();
+            mButtonStartPositionOn = false;
+        }
+    }
+
+    /**
+     * setStartPositionOn
+     */
+    @Override
+    public void setStartPositionOn() {
+
+        mButtonStartPositionOn = true;
+    }
+
+    @Override
+    public void stopAnimation() {
+        mStopRippleAnimation = true;
     }
 
     /**
@@ -202,6 +211,31 @@ public class FancyControlButton extends View implements AnimatedButton,
             }
 
         startAnimation();
+    }
+
+    /**
+     * setOn
+     */
+    private void setOn() {
+
+        mButtonOn = true;
+        mStopRippleAnimation = false;
+
+        mOnStateCircle.paint().setAlpha(MAX_ALPHA);
+        mOnStateCircle.setRadius(mAttrOnStateButtonSize);
+
+        mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+        mOffStateCircle.setRadius(mAttrOffStateButtonSize);
+
+        mRipple.paint().setAlpha(MIN_ALPHA);
+        mRipple.setRadius(mAttrOffStateButtonSize);
+
+        resetRipple();
+        onToggleAnimationEnd();
+
+        invalidate();
+
+        Log.d("testing", "setStartPositionOn called");
     }
 
     /**
@@ -366,9 +400,6 @@ public class FancyControlButton extends View implements AnimatedButton,
                 } else {
                     // Go back to starting position
                     resetRipple();
-
-                    // Delay before sending ripple out again
-                    //SystemClock.sleep(500);
                 }
 
                 postInvalidate();

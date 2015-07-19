@@ -111,6 +111,11 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
     }
 
     @Override
+    public void setButtonOn(boolean isOn) {
+        // Do nothing for DebugActivity
+    }
+
+    @Override
     public void playButtonAnimation() {
         // Do nothing for DebugActivity
     }
@@ -119,6 +124,11 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
     public void setHintMessage(String message) {
 
         //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void stopButtonAnimation() {
+        // Do nothing for DebugActivity
     }
 
     @Override

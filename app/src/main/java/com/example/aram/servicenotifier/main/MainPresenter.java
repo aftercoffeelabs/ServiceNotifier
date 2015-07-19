@@ -8,4 +8,6 @@ public interface MainPresenter {
     public void toggleNotificationState();
 
     public void resume();
+
+    public void pause();
 }

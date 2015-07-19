@@ -29,15 +29,22 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
     @Override
     public void resume() {
 
-        // Need to know the service state to properly set
-        // the hint and state messages
+        // Get the service state to properly set the hint
+        // and state messages when the app starts
+        // along with the control button state
         boolean status = mServiceInteractor.isServiceRunning();
 
         if (status) {
             onNotificationStateEnabled();
+            mMainView.setButtonOn(true);
         } else {
             onNotificationStateDisabled();
         }
+    }
+
+    @Override
+    public void pause() {
+        mMainView.stopButtonAnimation();
     }
 
     @Override

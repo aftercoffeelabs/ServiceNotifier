@@ -19,6 +19,16 @@ public interface AnimatedButton {
     void clicked();
 
     /**
+     * Interface definition for setting the button state to On
+     */
+    void setStartPositionOn();
+
+    /**
+     * Interface definition for suspending all animation threads
+     */
+    void stopAnimation();
+
+    /**
      * Interface definition for a callback to be invoked when the toggle animation ends
      */
     interface AnimationStateListener {
