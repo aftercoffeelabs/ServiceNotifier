@@ -135,15 +135,11 @@ public class FancyControlButton extends View implements AnimatedButton,
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        Log.d("testing", "onMeasure");
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
-        Log.d("testing", "onSizeChanged");
 
         // Get view dimensions with padding factored in
         int padX = getPaddingLeft() + getPaddingRight();
@@ -188,6 +184,8 @@ public class FancyControlButton extends View implements AnimatedButton,
     public void setStartPositionOn() {
 
         mButtonStartPositionOn = true;
+        mStopRippleAnimation = false;
+        //startRippleAnimation();
     }
 
     @Override
@@ -204,10 +202,10 @@ public class FancyControlButton extends View implements AnimatedButton,
             // Toggle button state
             mButtonOn = !mButtonOn;
 
-            // Toggle ripple animation
+            // Toggle animations
             mStopRippleAnimation = !mButtonOn;
             if (mStopRippleAnimation) {
-                resetRipple();
+                resetRippleProperties();
             }
 
         startAnimation();
@@ -230,12 +228,10 @@ public class FancyControlButton extends View implements AnimatedButton,
         mRipple.paint().setAlpha(MIN_ALPHA);
         mRipple.setRadius(mAttrOffStateButtonSize);
 
-        resetRipple();
-        onToggleAnimationEnd();
+        // Start ripple animation
+        startRippleAnimation();
 
         invalidate();
-
-        Log.d("testing", "setStartPositionOn called");
     }
 
     /**
@@ -253,14 +249,24 @@ public class FancyControlButton extends View implements AnimatedButton,
     @Override
     public void onToggleAnimationEnd() {
 
-        // Start looping the ripple effect animation
+        // Start looping the ripple effect animation once the button
+        // is in the On position
+        startRippleAnimation();
+    }
+
+    /**
+     * startRippleAnimation
+     */
+    public void startRippleAnimation() {
+
+        resetRippleProperties();
         (new Thread(new RippleAnimationRunnable())).start();
     }
 
     /**
-     * resetRipple
+     * resetRippleProperties
      */
-    private void resetRipple() {
+    private void resetRippleProperties() {
 
         if (mRipple != null) {
             mRipple.paint().setAlpha(MIN_ALPHA);
@@ -399,12 +405,13 @@ public class FancyControlButton extends View implements AnimatedButton,
                     mRipple.paint().setAlpha(currentAlpha + (sign * mRippleAlphaIncrement));
                 } else {
                     // Go back to starting position
-                    resetRipple();
+                    resetRippleProperties();
                 }
 
                 postInvalidate();
                 SystemClock.sleep(RIPPLE_DELAY_MS);
             }
+            Log.d("testing", "ripple thread exit");
         }
     }
 }

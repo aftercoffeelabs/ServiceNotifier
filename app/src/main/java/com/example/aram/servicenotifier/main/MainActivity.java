@@ -1,11 +1,16 @@
 package com.example.aram.servicenotifier.main;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
@@ -24,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @InjectView(R.id.mainView_state_text) TextView mStateMessage;
 
     private MainPresenter mPresenter;
+    private ObjectAnimator mHintMessageAnimator;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,13 +68,18 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         mControlButton.setOnClickListener(this);
 
+        // Setup animators
+        mHintMessageAnimator = ObjectAnimator.ofFloat(mHintMessage, "alpha", 0.2f, 1f);
+        mHintMessageAnimator.setDuration(2000);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Set the control button state
+        Log.d("testing", "Activity - onStart");
+
+        // Set the control button state, start looping animations
         mPresenter.resume();
     }
 
@@ -78,6 +89,8 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         // Suspend all looping animation threads
         mPresenter.pause();
+
+        Log.d("testing", "Activity - onStop");
     }
 
     @Override
@@ -85,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         super.onDestroy();
 
         mPresenter = null;
+        mHintMessageAnimator = null;
     }
 
     /**
@@ -115,6 +129,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     public void setHintMessage(String message) {
 
         mHintMessage.setText(message);
+        mHintMessageAnimator.start();
     }
 
     @Override

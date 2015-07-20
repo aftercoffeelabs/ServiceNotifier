@@ -32,9 +32,7 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
         // Get the service state to properly set the hint
         // and state messages when the app starts
         // along with the control button state
-        boolean status = mServiceInteractor.isServiceRunning();
-
-        if (status) {
+        if (mServiceInteractor.isServiceRunning()) {
             onNotificationStateEnabled();
             mMainView.setButtonOn(true);
         } else {
