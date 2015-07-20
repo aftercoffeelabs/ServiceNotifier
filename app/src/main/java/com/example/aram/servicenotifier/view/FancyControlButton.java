@@ -126,7 +126,7 @@ public class FancyControlButton extends View implements AnimatedButton,
         mRippleAlphaIncrement = (int)Math.floor(
                 (double)MAX_ALPHA / (double)((mAttrOnStateButtonSize - mAttrOffStateButtonSize) / 2));
 
-        mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+        mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_bars);
 
         mButtonOn = false;
         mStopRippleAnimation = true;
