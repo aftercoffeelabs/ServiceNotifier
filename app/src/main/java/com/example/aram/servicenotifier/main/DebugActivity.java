@@ -111,7 +111,7 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
     }
 
     @Override
-    public void setButtonOn(boolean isOn) {
+    public void setButtonOn() {
         // Do nothing for DebugActivity
     }
 

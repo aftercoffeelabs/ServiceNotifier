@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
@@ -29,7 +30,7 @@ public class FancyControlButton extends View implements AnimatedButton,
     private static final int MIN_ALPHA = 0;
     private static final int MAX_ALPHA = 255;
 
-    private volatile boolean mStopRippleAnimation;
+    private volatile boolean mIsRippleAnimationRunning;
     private volatile boolean mButtonOn;
 
     private boolean mButtonStartPositionOn;
@@ -52,6 +53,7 @@ public class FancyControlButton extends View implements AnimatedButton,
     private CirclePropertyHolder mRipple;           // ripple effect
 
     private Bitmap mBitmap;
+    private Paint mTextPaint = new Paint();;
 
     /**
      * FancyControlButton constructor
@@ -126,10 +128,14 @@ public class FancyControlButton extends View implements AnimatedButton,
         mRippleAlphaIncrement = (int)Math.floor(
                 (double)MAX_ALPHA / (double)((mAttrOnStateButtonSize - mAttrOffStateButtonSize) / 2));
 
-        mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_bars);
+        mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.btn_bars);
 
         mButtonOn = false;
-        mStopRippleAnimation = true;
+        mIsRippleAnimationRunning = false;
+
+        mTextPaint.setColor(getResources().getColor(R.color.white));
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setTextSize(30);
     }
 
     @Override
@@ -161,7 +167,16 @@ public class FancyControlButton extends View implements AnimatedButton,
         }
 
         if (mOnStateCircle != null) {
-            mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
+            if (!mButtonStartPositionOn) {
+                mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
+            } else {
+                // TODO: does this work??
+                mOnStateCircle.setDimensions(centerX, centerY, mAttrOnStateButtonSize, diameter);
+                // This path of the code effectively toggles off the button, so toggle it back on!
+                mButtonOn = false;
+                toggleOn();
+                mButtonStartPositionOn = false;
+            }
         }
 
         if (mRipple != null) {
@@ -171,10 +186,11 @@ public class FancyControlButton extends View implements AnimatedButton,
         // After view is initialized, check if the button needs to be automatically
         // set to the ON position for the user. This happens in the case where the
         // service is already running prior to the app starting
-        if (mButtonStartPositionOn == true && !mButtonOn) {
-            setOn();
-            mButtonStartPositionOn = false;
-        }
+//        Log.d("testing", "onSizeChanged");
+//        if (mButtonStartPositionOn == true && !mButtonOn) {
+//            toggleOn();
+//            mButtonStartPositionOn = false;
+//        }
     }
 
     /**
@@ -184,13 +200,15 @@ public class FancyControlButton extends View implements AnimatedButton,
     public void setStartPositionOn() {
 
         mButtonStartPositionOn = true;
-        mStopRippleAnimation = false;
-        //startRippleAnimation();
+        toggleOn();
     }
 
     @Override
     public void stopAnimation() {
-        mStopRippleAnimation = true;
+
+        // Stop all looping animations here
+        mIsRippleAnimationRunning = false;
+        resetRippleProperties();
     }
 
     /**
@@ -199,45 +217,46 @@ public class FancyControlButton extends View implements AnimatedButton,
     @Override
     public void clicked() {
 
-            // Toggle button state
-            mButtonOn = !mButtonOn;
+        // Toggle button state
+        mButtonOn = !mButtonOn;
 
-            // Toggle animations
-            mStopRippleAnimation = !mButtonOn;
-            if (mStopRippleAnimation) {
-                resetRippleProperties();
-            }
+        // Stop all animations if set to Off
+        if (!mButtonOn) {
+            stopAnimation();
+        }
 
-        startAnimation();
+        startToggleAnimation();
     }
 
     /**
-     * setOn
+     * toggleOn
      */
-    private void setOn() {
+    private void toggleOn() {
 
-        mButtonOn = true;
-        mStopRippleAnimation = false;
+//        if (!mButtonOn) { // TODO: do we need this check?
 
-        mOnStateCircle.paint().setAlpha(MAX_ALPHA);
-        mOnStateCircle.setRadius(mAttrOnStateButtonSize);
+            mButtonOn = true;
 
-        mOffStateCircle.paint().setStyle(Paint.Style.FILL);
-        mOffStateCircle.setRadius(mAttrOffStateButtonSize);
+            mOnStateCircle.paint().setAlpha(MAX_ALPHA);
+            mOnStateCircle.setRadius(mAttrOnStateButtonSize);
 
-        mRipple.paint().setAlpha(MIN_ALPHA);
-        mRipple.setRadius(mAttrOffStateButtonSize);
+            mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+            mOffStateCircle.setRadius(mAttrOffStateButtonSize);
 
-        // Start ripple animation
-        startRippleAnimation();
+            mRipple.paint().setAlpha(MIN_ALPHA);
+            mRipple.setRadius(mAttrOffStateButtonSize);
 
-        invalidate();
+            // Start ripple animation
+            startRippleAnimation();
+
+            invalidate();
+//        }
     }
 
     /**
-     * startAnimation
+     * startToggleAnimation
      */
-    private void startAnimation() {
+    private void startToggleAnimation() {
 
         // TODO: prevent new thread from starting again until animation cycle completes
         (new Thread(new ToggleAnimationRunnable(this))).start();
@@ -251,7 +270,9 @@ public class FancyControlButton extends View implements AnimatedButton,
 
         // Start looping the ripple effect animation once the button
         // is in the On position
-        startRippleAnimation();
+        if (mButtonOn) {
+            startRippleAnimation();
+        }
     }
 
     /**
@@ -259,8 +280,12 @@ public class FancyControlButton extends View implements AnimatedButton,
      */
     public void startRippleAnimation() {
 
-        resetRippleProperties();
-        (new Thread(new RippleAnimationRunnable())).start();
+        // If ripple is not running, start it!
+        if (!mIsRippleAnimationRunning) {
+            mIsRippleAnimationRunning = true;
+            resetRippleProperties();
+            (new Thread(new RippleAnimationRunnable())).start();
+        }
     }
 
     /**
@@ -314,6 +339,9 @@ public class FancyControlButton extends View implements AnimatedButton,
         // Always draw signal icon
         canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2),
                 ((getHeight() - mBitmap.getHeight()) / 2), null);
+
+        float offset = mBitmap.getWidth() * 0.80f;
+        canvas.drawText("-89 dBm", mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY() + offset, mTextPaint);
     }
 
     /**
@@ -387,7 +415,7 @@ public class FancyControlButton extends View implements AnimatedButton,
             int newRadius;
             int sign = 1; // start positive
 
-            while (!mStopRippleAnimation) {
+            while (mIsRippleAnimationRunning) {
 
                 currentRadius = mRipple.getRadius();
                 newRadius = currentRadius + EXPAND_INCREMENT;

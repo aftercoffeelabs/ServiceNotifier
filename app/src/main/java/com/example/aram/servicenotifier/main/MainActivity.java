@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
@@ -70,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         // Setup animators
         mHintMessageAnimator = ObjectAnimator.ofFloat(mHintMessage, "alpha", 0.2f, 1f);
-        mHintMessageAnimator.setDuration(2000);
+        mHintMessageAnimator.setDuration(4000);
     }
 
     @Override
@@ -102,15 +99,15 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     }
 
     /**
-     * Sets the button to On/Off upon activity start
+     * Sets the button to the On position upon activity startup
      *
      * Called during activity onStart() sequence
      */
     @Override
-    public void setButtonOn(boolean isOn) {
-        if (isOn) {
-            mControlButton.setStartPositionOn();
-        }
+    public void setButtonOn() {
+
+        mControlButton.setStartPositionOn();
+
     }
 
     @Override

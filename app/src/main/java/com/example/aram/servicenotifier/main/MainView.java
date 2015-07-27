@@ -5,7 +5,7 @@ package com.example.aram.servicenotifier.main;
  */
 public interface MainView {
 
-    void setButtonOn(boolean isOn);
+    void setButtonOn();
 
     void playButtonAnimation();
 

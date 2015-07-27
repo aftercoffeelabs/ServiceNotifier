@@ -10,6 +10,7 @@
     <dimen name="button_off_strokeSize">2dp</dimen>
     <dimen name="button_on_size">108dp</dimen>
     <dimen name="button_on_strokeSize">10dp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
 
 
 </resources>

@@ -34,7 +34,7 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
         // along with the control button state
         if (mServiceInteractor.isServiceRunning()) {
             onNotificationStateEnabled();
-            mMainView.setButtonOn(true);
+            mMainView.setButtonOn();
         } else {
             onNotificationStateDisabled();
         }
@@ -42,6 +42,7 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
 
     @Override
     public void pause() {
+
         mMainView.stopButtonAnimation();
     }
 

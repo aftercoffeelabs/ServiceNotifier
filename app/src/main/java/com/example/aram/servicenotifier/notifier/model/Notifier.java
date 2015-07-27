@@ -72,7 +72,7 @@ public class Notifier {
     private void setDefaultNotificationParameters() {
 
         // These parameters will not change
-        mBuilder.setSmallIcon(R.drawable.ic_launcher);
+        mBuilder.setSmallIcon(R.drawable.ic_launcher_bars);
         mBuilder.setContentTitle(mResources.getString(R.string.notification_title));
         mBuilder.setSound(mSoundUri);
 
