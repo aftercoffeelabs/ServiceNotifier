@@ -1,7 +1,12 @@
 package com.example.aram.servicenotifier.notifier.model;
 
+import android.content.res.Resources;
 import android.os.Handler;
+import android.telephony.ServiceState;
 import android.util.Log;
+
+import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +20,8 @@ public class ServiceStateHandler {
     // Example: Service state changes at 20.738, postDelayed is set using 15 sec, persistence
     //          is checked at 35.071, resulting in time delta of 14.333, which fails.
     public static final int DELAY_DURATION = AlertCriteria.MIN_PERSISTENCE_DURATION + 1;
+
+    private Resources mResources = SignalMonitorService.getContext().getResources();
 
     private AlertCriteria mAlertCriteria;
     private Handler mHandler = new Handler();
@@ -82,8 +89,18 @@ public class ServiceStateHandler {
                     // Update the state code being sent in the alert
                     alertCriteria.setLastReportedStateCode(alertCriteria.getStateCode());
 
-                    // Send the alert
+                    // Send the alert message properties
                     notifier.setMessage(alertCriteria.getCurrentServiceStateString());
+
+                    if (alertCriteria.getStateCode() != ServiceState.STATE_IN_SERVICE) {
+                        notifier.setMessageIconColor(
+                                serviceStateHdlr.mResources.getColor(R.color.red_500));
+                    } else {
+                        notifier.setMessageIconColor(
+                                serviceStateHdlr.mResources.getColor(R.color.light_green_600));
+                    }
+
+                    // Send the alert
                     notifier.sendNotification();
 
                     Log.d("testing", "Passed criteria!");

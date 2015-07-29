@@ -1,5 +1,6 @@
 package com.example.aram.servicenotifier.notifier.model;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
@@ -54,8 +55,14 @@ public class Notifier {
     }
 
     public void setMessage(String message){
+
         mBuilder.setContentText(message);
         mBuilder.setWhen(System.currentTimeMillis());
+    }
+
+    public void setMessageIconColor(int argb) {
+
+        mBuilder.setColor(argb);
     }
 
     /**
@@ -72,9 +79,10 @@ public class Notifier {
     private void setDefaultNotificationParameters() {
 
         // These parameters will not change
-        mBuilder.setSmallIcon(R.drawable.ic_launcher_bars);
+        mBuilder.setSmallIcon(R.drawable.ic_notification_bars);
         mBuilder.setContentTitle(mResources.getString(R.string.notification_title));
         mBuilder.setSound(mSoundUri);
+        mBuilder.setCategory(Notification.CATEGORY_STATUS);
 
         //TODO: use different vibration pattern for in-service and out of service
         mBuilder.setVibrate(new long[]{0, 500, 500, 500});

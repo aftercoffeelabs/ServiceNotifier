@@ -31,6 +31,7 @@ public class SignalMonitorService extends Service {
      * Get Service Context
      */
     public static Context getContext(){
+
         return mServiceContext;
     }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.about.AboutActivity;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
 import butterknife.ButterKnife;
@@ -47,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
                 startActivity(new Intent(this, DebugActivity.class));
                 break;
             case R.id.action_about:
-                // TODO
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

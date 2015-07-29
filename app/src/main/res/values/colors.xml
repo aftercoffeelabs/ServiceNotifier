@@ -18,4 +18,7 @@
     <!-- ACCENT -->
     <color name="accent_medium">#427cb3</color>
 
+    <!-- NOTIFICATION BAR ICON BACKGROUND -->
+    <color name="red_500">#F44336</color>
+
 </resources>

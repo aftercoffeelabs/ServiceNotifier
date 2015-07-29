@@ -113,8 +113,11 @@ public class FancyControlButton extends View implements AnimatedButton,
         mOnStateCircle.paint().setStyle(Paint.Style.FILL);
 
         // The Ripple effect
+        float strokeWidthDp = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 1.0f, getResources().getDisplayMetrics());
+
         mRipple = new CirclePropertyHolder(0, 0, mAttrOffStateButtonSize, new Paint());
-        mRipple.paint().setStrokeWidth(4.0f);
+        mRipple.paint().setStrokeWidth(strokeWidthDp);
         mRipple.paint().setColor(getResources().getColor(R.color.light_green_200));
         mRipple.paint().setAlpha(MIN_ALPHA);
         mRipple.paint().setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -133,9 +136,9 @@ public class FancyControlButton extends View implements AnimatedButton,
         mButtonOn = false;
         mIsRippleAnimationRunning = false;
 
-        mTextPaint.setColor(getResources().getColor(R.color.white));
-        mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setTextSize(30);
+//        mTextPaint.setColor(getResources().getColor(R.color.white));
+//        mTextPaint.setTextAlign(Paint.Align.CENTER);
+//        mTextPaint.setTextSize(30);
     }
 
     @Override
@@ -340,8 +343,8 @@ public class FancyControlButton extends View implements AnimatedButton,
         canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2),
                 ((getHeight() - mBitmap.getHeight()) / 2), null);
 
-        float offset = mBitmap.getWidth() * 0.80f;
-        canvas.drawText("-89 dBm", mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY() + offset, mTextPaint);
+//        float offset = mBitmap.getWidth() * 0.80f;
+//        canvas.drawText("-89 dBm", mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY() + offset, mTextPaint);
     }
 
     /**
