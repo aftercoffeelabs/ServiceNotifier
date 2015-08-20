@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.about.AboutActivity;
+import com.example.aram.servicenotifier.view.AnimatedButton;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
 import butterknife.ButterKnife;
@@ -25,6 +26,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @InjectView(R.id.mainView_control_button) FancyControlButton mControlButton;
     @InjectView(R.id.mainView_hint_text) TextView mHintMessage;
     @InjectView(R.id.mainView_state_text) TextView mStateMessage;
+
+    private static final long CLICK_DELAY_MS = 500;
+    private long mLastClickTime;
 
     private MainPresenter mPresenter;
     private ObjectAnimator mHintMessageAnimator;
@@ -139,10 +143,27 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.mainView_control_button:
-                mPresenter.toggleNotificationState();
-                break;
+        if (allowClick()) {
+            switch (v.getId()) {
+                case R.id.mainView_control_button:
+                    mPresenter.toggleNotificationState();
+                    break;
+            }
         }
+    }
+
+    /**
+     * Rate limits clicks on this view
+     */
+    private boolean allowClick() {
+
+        boolean allow = false;
+        long now = System.currentTimeMillis();
+
+        if (now >= mLastClickTime + CLICK_DELAY_MS) {
+            mLastClickTime = now;
+            allow = true;
+        }
+        return allow;
     }
 }

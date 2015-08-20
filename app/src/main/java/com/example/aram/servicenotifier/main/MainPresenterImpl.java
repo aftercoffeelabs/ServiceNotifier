@@ -5,6 +5,7 @@ import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.OnNotificationStateChangeListener;
 import com.example.aram.servicenotifier.notifier.service.ServiceInteractor;
 import com.example.aram.servicenotifier.notifier.service.ServiceInteractorImpl;
+import com.example.aram.servicenotifier.view.AnimatedButton;
 
 /**
  * Class MainPresenterImpl
@@ -14,6 +15,9 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
     private MainView mMainView;
     private ServiceInteractor mServiceInteractor;
 
+    /**
+     * Constructor
+     */
     public MainPresenterImpl(MainView view) {
         mMainView = view;
         mServiceInteractor = ServiceInteractorImpl.instance();
@@ -59,5 +63,4 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
         mMainView.setStateMessage(MyApp.getRes().getString(R.string.notification_state_off_message));
         mMainView.setHintMessage(MyApp.getRes().getString(R.string.hint_tap_on_message));
     }
-
 }

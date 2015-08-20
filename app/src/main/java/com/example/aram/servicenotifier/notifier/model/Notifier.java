@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.aram.servicenotifier.R;
@@ -62,7 +63,10 @@ public class Notifier {
 
     public void setMessageIconColor(int argb) {
 
-        mBuilder.setColor(argb);
+        // setColor only supported on Lollipop
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBuilder.setColor(argb);
+        }
     }
 
     /**

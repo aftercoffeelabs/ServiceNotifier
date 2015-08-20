@@ -3,6 +3,8 @@ package com.example.aram.servicenotifier.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.example.aram.servicenotifier.main.MainPresenter;
+
 /**
  * Interface Class AnimatedButton
  */

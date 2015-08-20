@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.main.MainPresenter;
 import com.example.aram.servicenotifier.util.CirclePropertyHolder;
 
 /**
