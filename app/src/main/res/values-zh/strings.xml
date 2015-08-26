@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Service Notifier</string>
+    <string name="about_title_libraries">第三方库</string>
+    <string name="about_title_support">支撑</string>
+    <string name="about_title_version">文本</string>
+    <string name="action_about">左右</string>
+    <string name="action_settings">设置</string>
+    <string name="hint_tap_off_message">点击关闭通知</string>
+    <string name="hint_tap_on_message">点击打开通知</string>
+    <string name="notification_content_emergency">您只能进行紧急呼叫</string>
+</resources>

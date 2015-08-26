@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Service Notifier</string>
+    <string name="about_title_libraries">Bibliotecas de terceros</string>
+    <string name="about_title_support">Soporte</string>
+    <string name="about_title_version">Versión</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="hint_tap_off_message">Pulse para desactivar las notificaciones</string>
+    <string name="hint_tap_on_message">Toque para activar las notificaciones</string>
+    <string name="notification_content_emergency">Sólo puede realizar llamadas de emergencia</string>
+</resources>

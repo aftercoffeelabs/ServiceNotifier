@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Service Notifier</string>
+    <string name="app_name" translatable="false">Service Notifier</string>
 
-    <string name="title_activity_main">Service Notifier</string>
+    <string name="title_activity_main" translatable="false">Service Notifier</string>
     <string name="title_activity_about">About</string>
 
     <string name="action_settings">Settings</string>
@@ -26,8 +26,8 @@
     <string name="about_title_support">Support</string>
     <string name="about_title_libraries">Third-Party Libraries</string>
 
-    <string name="about_text_version">1.0</string>
-    <string name="about_text_support">aftercoffeeteam@gmail.com</string>
-    <string name="about_text_libraries">ButterKnife</string>
+    <string name="about_text_version" translatable="false">1.0</string>
+    <string name="about_text_support" translatable="false">aftercoffeeteam@gmail.com</string>
+    <string name="about_text_libraries" translatable="false">ButterKnife</string>
 
 </resources>

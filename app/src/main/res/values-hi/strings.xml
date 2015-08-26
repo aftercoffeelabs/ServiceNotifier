@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Service Notifier</string>
+    <string name="about_title_libraries">तीसरे पक्ष के पुस्तकालयों</string>
+    <string name="about_title_support">समर्थन</string>
+    <string name="about_title_version">संस्करण</string>
+    <string name="action_about">के बारे में</string>
+    <string name="action_settings">सेटिंग्स</string>
+    <string name="hint_tap_off_message">सूचनाओं को बंद करने के लिए टैप</string>
+    <string name="hint_tap_on_message">सूचनाओं को चालू करने की ठोकर</string>
+    <string name="notification_content_emergency">आप केवल आपातकालीन कॉल कर सकते हैं</string>
+</resources>

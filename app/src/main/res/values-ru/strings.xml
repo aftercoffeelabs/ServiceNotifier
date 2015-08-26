@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Service Notifier</string>
+    <string name="about_title_libraries">Сторонние библиотеки</string>
+    <string name="about_title_support">поддержка</string>
+    <string name="about_title_version">версия</string>
+    <string name="action_about">Около</string>
+    <string name="action_settings">настройки</string>
+    <string name="hint_tap_off_message">Нажмите, чтобы отключить уведомления</string>
+    <string name="hint_tap_on_message">Нажмите, чтобы включить уведомления</string>
+    <string name="notification_content_emergency">Вы можете сделать только экстренные звонки</string>
+</resources>
