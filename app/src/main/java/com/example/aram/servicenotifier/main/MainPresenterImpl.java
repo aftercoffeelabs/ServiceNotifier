@@ -1,5 +1,9 @@
 package com.example.aram.servicenotifier.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.OnNotificationStateChangeListener;
@@ -48,6 +52,8 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
     public void pause() {
 
         mMainView.stopButtonAnimation();
+
+        mMainView.saveSessionData(mServiceInteractor.isServiceRunning());
     }
 
     @Override

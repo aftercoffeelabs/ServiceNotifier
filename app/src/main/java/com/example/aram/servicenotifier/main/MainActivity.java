@@ -1,7 +1,10 @@
 package com.example.aram.servicenotifier.main;
 
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.about.AboutActivity;
+import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.view.AnimatedButton;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
@@ -26,6 +30,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     @InjectView(R.id.mainView_control_button) FancyControlButton mControlButton;
     @InjectView(R.id.mainView_hint_text) TextView mHintMessage;
     @InjectView(R.id.mainView_state_text) TextView mStateMessage;
+
+    public static final String APP_PREFERENCES = "ServiceNotifierPreferences";
+    public static final String SERVICE_ENABLED = "is_service_enabled";
 
     private static final long CLICK_DELAY_MS = 500;
     private long mLastClickTime;
@@ -112,7 +119,6 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     public void setButtonOn() {
 
         mControlButton.setStartPositionOn();
-
     }
 
     @Override
@@ -138,6 +144,20 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     public void setStateMessage(String message) {
 
         mStateMessage.setText(message);
+    }
+
+    @Override
+    public void saveSessionData(boolean isRunning) {
+
+        // Save service state to restore it in case
+        // of system reboot
+        SharedPreferences sharedPref = MyApp.getContext().getSharedPreferences(
+                APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
+
+        edit.clear();
+        edit.putBoolean(SERVICE_ENABLED, isRunning);
+        edit.commit();
     }
 
     @Override

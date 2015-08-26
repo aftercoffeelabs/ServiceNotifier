@@ -26,6 +26,7 @@ public class ServiceInteractorImpl implements ServiceInteractor {
      * Class constructor.
      */
     private ServiceInteractorImpl() {
+
         initializeMonitorState();
     }
 

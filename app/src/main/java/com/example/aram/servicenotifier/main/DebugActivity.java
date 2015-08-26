@@ -143,6 +143,11 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
         }
     }
 
+    @Override
+    public void saveSessionData(boolean isRunning) {
+        // Do nothing for DebugActivity
+    }
+
     private void logHeapSize() {
         ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         int memoryClass = am.getMemoryClass();

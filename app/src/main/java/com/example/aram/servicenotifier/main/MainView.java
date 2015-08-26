@@ -14,4 +14,6 @@ public interface MainView {
     void setHintMessage(String message);
 
     void setStateMessage(String message);
+
+    void saveSessionData(boolean isRunning);
 }
