@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">Нажмите, чтобы отключить уведомления</string>
     <string name="hint_tap_on_message">Нажмите, чтобы включить уведомления</string>
     <string name="notification_content_emergency">Вы можете сделать только экстренные звонки</string>
+    <string name="notification_content_in_service">Ваша служба была восстановлена</string>
+    <string name="notification_content_out_service">Ваш телефон не работает</string>
+    <string name="notification_content_unknown">Невозможно определить состояние вашего сервиса</string>
+    <string name="notification_state_off_message">Уведомления отключена</string>
+    <string name="notification_state_on_message">Уведомления включен</string>
+    <string name="notification_title">Телефон службы оповещения</string>
+    <string name="title_activity_about">Около</string>
 </resources>

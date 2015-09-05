@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">Pulse para desactivar las notificaciones</string>
     <string name="hint_tap_on_message">Toque para activar las notificaciones</string>
     <string name="notification_content_emergency">Sólo puede realizar llamadas de emergencia</string>
+    <string name="notification_content_in_service">Su servicio ha sido restaurado</string>
+    <string name="notification_content_out_service">El teléfono está fuera de servicio</string>
+    <string name="notification_content_unknown">No se puede determinar el estado del servicio</string>
+    <string name="notification_state_off_message">Notificaciones desactivados</string>
+    <string name="notification_state_on_message">Notificaciones habilitadas</string>
+    <string name="notification_title">Alerta de Servicio Telefónico</string>
+    <string name="title_activity_about">Acerca de</string>
 </resources>

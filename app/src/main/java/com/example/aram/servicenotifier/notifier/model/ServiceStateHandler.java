@@ -19,7 +19,7 @@ public class ServiceStateHandler {
     // Additional 1 sec is to compensate for time delay precision errors
     // Example: Service state changes at 20.738, postDelayed is set using 15 sec, persistence
     //          is checked at 35.071, resulting in time delta of 14.333, which fails.
-    public static final int DELAY_DURATION = AlertCriteria.MIN_PERSISTENCE_DURATION + 1;
+    //public static final int DELAY_DURATION = AlertCriteria.persistenceDuration + 1;
 
     private Resources mResources = SignalMonitorService.getContext().getResources();
 
@@ -57,7 +57,7 @@ public class ServiceStateHandler {
             mAlertCriteria.setTimeStamp();
 
             mHandler.postDelayed(mVerifierRunnable,
-                    TimeUnit.SECONDS.toMillis(DELAY_DURATION));
+                    TimeUnit.SECONDS.toMillis(AlertCriteria.persistenceDuration + 1));
         }
     }
 
@@ -95,9 +95,11 @@ public class ServiceStateHandler {
                     if (alertCriteria.getStateCode() != ServiceState.STATE_IN_SERVICE) {
                         notifier.setMessageIconColor(
                                 serviceStateHdlr.mResources.getColor(R.color.red_500));
+                        notifier.setVibratePattern(Notifier.VIBRATE_ONE_LONG);
                     } else {
                         notifier.setMessageIconColor(
                                 serviceStateHdlr.mResources.getColor(R.color.light_green_600));
+                        notifier.setVibratePattern(Notifier.VIBRATE_TWO_SHORT);
                     }
 
                     // Send the alert

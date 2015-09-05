@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">点击关闭通知</string>
     <string name="hint_tap_on_message">点击打开通知</string>
     <string name="notification_content_emergency">您只能进行紧急呼叫</string>
+    <string name="notification_content_in_service">您的服务已恢复</string>
+    <string name="notification_content_out_service">您的手机不在服务区</string>
+    <string name="notification_content_unknown">无法确定您的服务状态</string>
+    <string name="notification_state_off_message">通知停用</string>
+    <string name="notification_state_on_message">通知启用</string>
+    <string name="notification_title">电话服务警报</string>
+    <string name="title_activity_about">左右</string>
 </resources>

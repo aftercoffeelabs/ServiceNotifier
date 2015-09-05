@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference android:title="Persistence Time"
+
+            android:summary="Select the kind of data that you would like to download"
+            android:key="@string/sharedPrefKey_persistence_time"
+            android:defaultValue="60"
+            android:entries="@array/listArray"
+            android:layout="@layout/pref_setting"
+            android:entryValues="@array/listValues"
+            android:persistent="true"/>
+
+</PreferenceScreen>

@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">Tippen Sie zum Ausschalten Benachrichtigungen</string>
     <string name="hint_tap_on_message">Tippen Sie auf Meldungen schalten</string>
     <string name="notification_content_emergency">Sie können nur Notrufe</string>
+    <string name="notification_content_in_service">Ihren Service wieder hergestellt worden ist</string>
+    <string name="notification_content_out_service">Ihr Telefon ist außer Betrieb</string>
+    <string name="notification_content_unknown">Nicht in der Lage , Ihren Service Zustand zu bestimmen</string>
+    <string name="notification_state_off_message">Benachrichtigungen deaktiviert</string>
+    <string name="notification_state_on_message">Benachrichtigungen aktivieren</string>
+    <string name="notification_title">Telefon- Service Alert</string>
+    <string name="title_activity_about">über</string>
 </resources>

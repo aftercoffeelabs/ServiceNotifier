@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">Appuyez sur pour désactiver les notifications</string>
     <string name="hint_tap_on_message">Touchez pour tourner sur les notifications</string>
     <string name="notification_content_emergency">Vous ne pouvez faire des appels d\'urgence</string>
+    <string name="notification_content_in_service">Votre service a été restauré</string>
+    <string name="notification_content_out_service">Votre téléphone est hors service</string>
+    <string name="notification_content_unknown">Impossible de déterminer votre état de service</string>
+    <string name="notification_state_off_message">Notifications désactivées</string>
+    <string name="notification_state_on_message">Notifications activées</string>
+    <string name="notification_title">Téléphone service d\'alerte</string>
+    <string name="title_activity_about">Sur</string>
 </resources>

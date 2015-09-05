@@ -58,4 +58,5 @@
         android:scrollbars="vertical"
         android:textColor="@color/abc_primary_text_material_dark"
         android:layout_above="@+id/textView" />
+
 </RelativeLayout>

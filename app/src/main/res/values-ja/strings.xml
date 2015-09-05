@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">通知をオフにするをタップ</string>
     <string name="hint_tap_on_message">通知をオンにするをタップ</string>
     <string name="notification_content_emergency">あなただけの緊急電話をかけることができます</string>
+    <string name="notification_content_in_service">あなたのサービスが復元されました</string>
+    <string name="notification_content_out_service">お使いの携帯電話は、サービスの外にあります</string>
+    <string name="notification_content_unknown">あなたのサービスの状態を判断することができません</string>
+    <string name="notification_state_off_message">通知は無効</string>
+    <string name="notification_state_on_message">通知は有効</string>
+    <string name="notification_title">電話サービスアラート</string>
+    <string name="title_activity_about">について</string>
 </resources>

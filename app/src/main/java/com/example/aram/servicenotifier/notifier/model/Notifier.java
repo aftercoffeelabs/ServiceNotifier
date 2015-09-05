@@ -17,7 +17,9 @@ import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
  */
 public class Notifier {
 
-    static final int NOTIFICATION_ID = 8792; // unique within app
+    public static final int NOTIFICATION_ID = 8792; // unique within app
+    public static final int VIBRATE_TWO_SHORT = 1;
+    public static final int VIBRATE_ONE_LONG = 2;
 
     private static Notifier sInstance = null;
 
@@ -61,6 +63,20 @@ public class Notifier {
         mBuilder.setWhen(System.currentTimeMillis());
     }
 
+    public void setVibratePattern(int pattern) {
+
+        // Vibrate spec: { start delay, vibrate, sleep, ...}
+
+        switch (pattern) {
+            case VIBRATE_TWO_SHORT:
+                mBuilder.setVibrate(new long[]{0, 500, 500, 500});
+                break;
+            case VIBRATE_ONE_LONG:
+                mBuilder.setVibrate(new long[]{0, 2000});
+                break;
+        }
+    }
+
     public void setMessageIconColor(int argb) {
 
         // setColor only supported on Lollipop
@@ -87,10 +103,6 @@ public class Notifier {
         mBuilder.setContentTitle(mResources.getString(R.string.notification_title));
         mBuilder.setSound(mSoundUri);
         mBuilder.setCategory(Notification.CATEGORY_STATUS);
-
-        //TODO: use different vibration pattern for in-service and out of service
-        mBuilder.setVibrate(new long[]{0, 500, 500, 500});
-
         mBuilder.setShowWhen(true);
     }
 }

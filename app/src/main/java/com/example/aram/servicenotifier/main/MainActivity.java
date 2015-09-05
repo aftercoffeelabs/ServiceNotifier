@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.about.AboutActivity;
 import com.example.aram.servicenotifier.infrastructure.MyApp;
+import com.example.aram.servicenotifier.settings.SettingsActivity;
 import com.example.aram.servicenotifier.view.AnimatedButton;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
@@ -34,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     public static final String APP_PREFERENCES = "ServiceNotifierPreferences";
     public static final String SERVICE_ENABLED = "is_service_enabled";
 
-    private static final long CLICK_DELAY_MS = 500;
+    private static final long CLICK_DELAY_MS = 750;
     private long mLastClickTime;
 
     private MainPresenter mPresenter;
@@ -60,6 +61,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

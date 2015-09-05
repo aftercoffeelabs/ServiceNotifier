@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">알림을 해제 탭</string>
     <string name="hint_tap_on_message">알림 을 설정하는 탭</string>
     <string name="notification_content_emergency">당신은 긴급 통화를 할 수 있습니다</string>
+    <string name="notification_content_in_service">당신의 서비스가 복원 된</string>
+    <string name="notification_content_out_service">휴대 전화 서비스 를 벗어</string>
+    <string name="notification_content_unknown">서비스 상태를 확인할 수 없습니다</string>
+    <string name="notification_state_off_message">알림 비활성화</string>
+    <string name="notification_state_on_message">알림 활성화</string>
+    <string name="notification_title">전화 서비스 경고</string>
+    <string name="title_activity_about">약</string>
 </resources>

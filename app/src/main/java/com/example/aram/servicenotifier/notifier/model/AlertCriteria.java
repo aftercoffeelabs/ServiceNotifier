@@ -1,9 +1,16 @@
 package com.example.aram.servicenotifier.notifier.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.telephony.ServiceState;
+import android.util.Log;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
 
 /**
@@ -13,7 +20,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static final int MIN_PERSISTENCE_DURATION = 120; // seconds
+    public static int persistenceDuration = 60; // seconds
 
     private Resources mResources = SignalMonitorService.getContext().getResources();
 
@@ -22,12 +29,7 @@ public class AlertCriteria {
     private long mCreationTime = 0;
 
     /**
-     * Default class constructor.
-     */
-    public AlertCriteria() {}
-
-    /**
-     * Alternate class constructor.
+     * Class constructor.
      */
     public AlertCriteria(int code) {
 
@@ -35,6 +37,8 @@ public class AlertCriteria {
         mLastReportedStateCode = code;
 
         mCreationTime = System.nanoTime();
+
+        readSharedPref();
     }
 
     public int getStateCode() {
@@ -62,7 +66,25 @@ public class AlertCriteria {
         mCreationTime = System.nanoTime(); // current time
     }
 
+    private void readSharedPref() {
+
+        String key = MyApp.getRes().getString(R.string.sharedPrefKey_persistence_time);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
+        String prefValue = prefs.getString(key, "NA");
+
+        // If a saved value exists, use it
+        if (!(prefValue.equals("NA"))) {
+
+            persistenceDuration = Integer.parseInt(prefValue);
+        }
+
+        Log.d("testing", "readSharedPref() - Read value of " + prefValue);
+    }
+
     public boolean isCriteriaSatisfied() {
+
+        Log.d("testing", "AlertCriteria - using " + Integer.toString(persistenceDuration) + " secs");
 
         // Notification Criteria:
         //  1. Persistence time is met
@@ -94,7 +116,7 @@ public class AlertCriteria {
 
     private boolean isPersisted() {
 
-        return (getPersistenceDuration() >= MIN_PERSISTENCE_DURATION) ? true: false;
+        return (getPersistenceDuration() >= persistenceDuration) ? true: false;
     }
 
     /**
@@ -108,5 +130,13 @@ public class AlertCriteria {
         durationSecs = (double)elapsedTimeNano / 1000000000.0;
 
         return durationSecs;
+    }
+
+    /**
+     * Static method to update the persistence duration based on user settings
+     */
+    public static void setPersistenceDuration(int timeSec) {
+
+        persistenceDuration = timeSec;
     }
 }

@@ -9,4 +9,11 @@
     <string name="hint_tap_off_message">सूचनाओं को बंद करने के लिए टैप</string>
     <string name="hint_tap_on_message">सूचनाओं को चालू करने की ठोकर</string>
     <string name="notification_content_emergency">आप केवल आपातकालीन कॉल कर सकते हैं</string>
+    <string name="notification_content_in_service">आपकी सेवा में बहाल कर दिया गया है</string>
+    <string name="notification_content_out_service">अपने फोन सेवा से बाहर है</string>
+    <string name="notification_content_unknown">आपकी सेवा राज्य निर्धारण करने में असमर्थ</string>
+    <string name="notification_state_off_message">सूचनाएं अक्षम</string>
+    <string name="notification_state_on_message">सूचनाएं सक्षम</string>
+    <string name="notification_title">फोन सेवा चेतावनी</string>
+    <string name="title_activity_about">के बारे में</string>
 </resources>
