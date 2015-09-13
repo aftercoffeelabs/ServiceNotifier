@@ -15,4 +15,5 @@
         <!-- Support library compatibility -->
         <item name="background">@color/light_green_600</item>
     </style>
+
 </resources>

@@ -39,5 +39,6 @@
 
     <!-- Shared Preference Keys -->
     <string name="sharedPrefKey_persistence_time">persistence_time</string>
+    <string name="sharedPrefKey_vibrate">vibrate</string>
 
 </resources>

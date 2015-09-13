@@ -53,6 +53,7 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/action_settings"
+            android:theme="@style/SettingsTheme"
             android:screenOrientation="portrait"
             android:parentActivityName=".main.MainActivity" >
             <meta-data

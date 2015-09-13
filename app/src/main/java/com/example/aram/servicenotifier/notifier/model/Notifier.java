@@ -3,13 +3,17 @@ package com.example.aram.servicenotifier.notifier.model;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.aram.servicenotifier.R;
+import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.service.SignalMonitorService;
 
 /**
@@ -30,6 +34,8 @@ public class Notifier {
     private NotificationCompat.Builder mBuilder;
     private Uri mSoundUri;
 
+    private static boolean doVibrate = true;
+
     /**
      * Class constructor.
      */
@@ -44,6 +50,8 @@ public class Notifier {
         // Initialize Notification Builder
         mBuilder = new NotificationCompat.Builder(mContext);
         setDefaultNotificationParameters();
+
+        readSharedPref();
     }
 
     /**
@@ -65,15 +73,19 @@ public class Notifier {
 
     public void setVibratePattern(int pattern) {
 
-        // Vibrate spec: { start delay, vibrate, sleep, ...}
-
-        switch (pattern) {
-            case VIBRATE_TWO_SHORT:
-                mBuilder.setVibrate(new long[]{0, 500, 500, 500});
-                break;
-            case VIBRATE_ONE_LONG:
-                mBuilder.setVibrate(new long[]{0, 2000});
-                break;
+        if (doVibrate) {
+            // Vibrate spec: { start delay, vibrate, sleep, ...}
+            switch (pattern) {
+                case VIBRATE_TWO_SHORT:
+                    mBuilder.setVibrate(new long[]{0, 500, 500, 500});
+                    break;
+                case VIBRATE_ONE_LONG:
+                    mBuilder.setVibrate(new long[]{0, 2000});
+                    break;
+            }
+        } else {
+            // User has disabled vibration in settings
+            mBuilder.setVibrate(new long[]{0l});
         }
     }
 
@@ -104,5 +116,24 @@ public class Notifier {
         mBuilder.setSound(mSoundUri);
         mBuilder.setCategory(Notification.CATEGORY_STATUS);
         mBuilder.setShowWhen(true);
+    }
+
+    /**
+     * Static method to set the vibrate feature based on user settings
+     */
+    public static void doVibrate(boolean state) {
+
+        doVibrate = state;
+    }
+
+    /**
+     * Loads user settings upon initialization
+     */
+    private void readSharedPref() {
+
+        String key = MyApp.getRes().getString(R.string.sharedPrefKey_vibrate);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
+        doVibrate = prefs.getBoolean(key, true);
     }
 }

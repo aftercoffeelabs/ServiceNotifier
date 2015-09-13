@@ -45,10 +45,6 @@ public class ServiceStateHandler {
             mAlertCriteria = new AlertCriteria(stateCode);
         }
 
-        // Check new vs. existing service state
-        // TODO: consider checking here for stateCode to be IN_SERVICE or OUT_OF_SERVICE
-        // before updating the mAlert object since those are the only codes we care about?
-
         if (mAlertCriteria.getStateCode() != stateCode) {
 
             // If there is a change in service state,
@@ -56,8 +52,9 @@ public class ServiceStateHandler {
             mAlertCriteria.setStateCode(stateCode);
             mAlertCriteria.setTimeStamp();
 
+            long delayTime = AlertCriteria.getPersistenceDuration() + 1;
             mHandler.postDelayed(mVerifierRunnable,
-                    TimeUnit.SECONDS.toMillis(AlertCriteria.persistenceDuration + 1));
+                    TimeUnit.SECONDS.toMillis(delayTime));
         }
     }
 

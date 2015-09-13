@@ -10,4 +10,6 @@ public interface ServiceInteractor {
     public boolean isServiceRunning();
 
     public void toggleState(OnNotificationStateChangeListener listener);
+
+    public void restart();
 }

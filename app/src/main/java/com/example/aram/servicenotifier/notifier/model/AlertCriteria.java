@@ -1,10 +1,7 @@
 package com.example.aram.servicenotifier.notifier.model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.telephony.ServiceState;
 import android.util.Log;
@@ -20,7 +17,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    public static int persistenceDuration = 60; // seconds
+    private static int persistenceDuration = 60; // seconds
 
     private Resources mResources = SignalMonitorService.getContext().getResources();
 
@@ -66,6 +63,9 @@ public class AlertCriteria {
         mCreationTime = System.nanoTime(); // current time
     }
 
+    /**
+     * Loads user settings upon initialization
+     */
     private void readSharedPref() {
 
         String key = MyApp.getRes().getString(R.string.sharedPrefKey_persistence_time);
@@ -78,13 +78,9 @@ public class AlertCriteria {
 
             persistenceDuration = Integer.parseInt(prefValue);
         }
-
-        Log.d("testing", "readSharedPref() - Read value of " + prefValue);
     }
 
     public boolean isCriteriaSatisfied() {
-
-        Log.d("testing", "AlertCriteria - using " + Integer.toString(persistenceDuration) + " secs");
 
         // Notification Criteria:
         //  1. Persistence time is met
@@ -116,13 +112,13 @@ public class AlertCriteria {
 
     private boolean isPersisted() {
 
-        return (getPersistenceDuration() >= persistenceDuration) ? true: false;
+        return (getPersistenceTime() >= persistenceDuration) ? true: false;
     }
 
     /**
      * Returns the duration that this alert has persisted (in seconds).
      */
-    private double getPersistenceDuration() {
+    private double getPersistenceTime() {
 
         double durationSecs = 0.0;
 
@@ -130,6 +126,14 @@ public class AlertCriteria {
         durationSecs = (double)elapsedTimeNano / 1000000000.0;
 
         return durationSecs;
+    }
+
+    /**
+     * Static method to update the persistence duration based on user settings
+     */
+    public static int getPersistenceDuration() {
+
+        return persistenceDuration;
     }
 
     /**

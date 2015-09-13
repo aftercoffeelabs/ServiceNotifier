@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference android:title="Persistence Time"
-
-            android:summary="Select the kind of data that you would like to download"
+    <ListPreference android:title="Notification Time"
+            android:summary="How long the service state change should persist before notifying you"
             android:key="@string/sharedPrefKey_persistence_time"
             android:defaultValue="60"
             android:entries="@array/listArray"
-            android:layout="@layout/pref_setting"
             android:entryValues="@array/listValues"
             android:persistent="true"/>
+
+    <SwitchPreference android:title="Vibrate"
+        android:defaultValue="true"
+        android:key="@string/sharedPrefKey_vibrate" />
 
 </PreferenceScreen>
