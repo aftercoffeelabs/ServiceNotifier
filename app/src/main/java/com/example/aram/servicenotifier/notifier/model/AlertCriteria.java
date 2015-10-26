@@ -17,7 +17,7 @@ public class AlertCriteria {
 
     // Service states: IN_SERVICE, OUT_OF_SERVICE, EMERGENCY_ONLY, POWER_OFF
 
-    private static int persistenceDuration = 60; // seconds
+    private static int persistenceDuration = 60; // seconds, default
 
     private Resources mResources = SignalMonitorService.getContext().getResources();
 
@@ -96,7 +96,6 @@ public class AlertCriteria {
             case ServiceState.STATE_IN_SERVICE:
                 message = mResources.getString(R.string.notification_content_in_service);
                 break;
-            case ServiceState.STATE_POWER_OFF: // TODO: do not use POWER_OFF
             case ServiceState.STATE_OUT_OF_SERVICE:
                 message = mResources.getString(R.string.notification_content_out_service);
                 break;

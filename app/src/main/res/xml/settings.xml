@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference android:title="Notification Time"
-            android:summary="How long the service state change should persist before notifying you"
-            android:key="@string/sharedPrefKey_persistence_time"
-            android:defaultValue="60"
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues"
-            android:persistent="true"/>
+    <PreferenceCategory android:title="@string/settings_category_notifications">
 
-    <SwitchPreference android:title="Vibrate"
-        android:defaultValue="true"
-        android:key="@string/sharedPrefKey_vibrate" />
+        <ListPreference android:title="@string/settings_title_time"
+                android:summary="@string/settings_summary_time"
+                android:key="@string/sharedPrefKey_persistence_time"
+                android:defaultValue="60"
+                android:entries="@array/listArray"
+                android:entryValues="@array/listValues"
+                android:persistent="true"/>
+
+        <SwitchPreference android:title="@string/settings_title_vibrate"
+            android:defaultValue="true"
+            android:key="@string/sharedPrefKey_vibrate" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

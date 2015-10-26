@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Service Notifier</string>
     <string name="about_title_libraries">Bibliotecas de terceros</string>
     <string name="about_title_support">Soporte</string>
     <string name="about_title_version">Versión</string>
@@ -16,4 +15,13 @@
     <string name="notification_state_on_message">Notificaciones habilitadas</string>
     <string name="notification_title">Alerta de Servicio Telefónico</string>
     <string name="title_activity_about">Acerca de</string>
+    <string name="settings_category_notifications">Notificaciones</string>
+    <string name="settings_summary_time">Elija cuándo desea que se le notifique de los cambios en su servicio.</string>
+    <string name="settings_time_10min">10 minutos</string>
+    <string name="settings_time_1min">1 minuto</string>
+    <string name="settings_time_2min">2 minutos</string>
+    <string name="settings_time_30sec">30 segundos</string>
+    <string name="settings_time_5min">5 minutos</string>
+    <string name="settings_title_time">Tiempo Notificación</string>
+    <string name="settings_title_vibrate">Vibrar</string>
 </resources>

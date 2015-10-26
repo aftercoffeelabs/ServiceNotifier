@@ -37,8 +37,13 @@
     <string name="settings_time_5min">5 minutes</string>
     <string name="settings_time_10min">10 minutes</string>
 
+    <string name="settings_category_notifications">Notifications</string>
+    <string name="settings_title_time">Notification Time</string>
+    <string name="settings_summary_time">Choose how soon you want to be notified of changes in your service.</string>
+    <string name="settings_title_vibrate">Vibrate</string>
+
     <!-- Shared Preference Keys -->
-    <string name="sharedPrefKey_persistence_time">persistence_time</string>
-    <string name="sharedPrefKey_vibrate">vibrate</string>
+    <string name="sharedPrefKey_persistence_time" translatable="false">persistence_time</string>
+    <string name="sharedPrefKey_vibrate" translatable="false">vibrate</string>
 
 </resources>

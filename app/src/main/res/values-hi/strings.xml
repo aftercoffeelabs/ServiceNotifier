@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Service Notifier</string>
     <string name="about_title_libraries">तीसरे पक्ष के पुस्तकालयों</string>
     <string name="about_title_support">समर्थन</string>
     <string name="about_title_version">संस्करण</string>
@@ -16,4 +15,13 @@
     <string name="notification_state_on_message">सूचनाएं सक्षम</string>
     <string name="notification_title">फोन सेवा चेतावनी</string>
     <string name="title_activity_about">के बारे में</string>
+    <string name="settings_category_notifications">सूचनाएं</string>
+    <string name="settings_summary_time">आप अपनी सेवा में परिवर्तन के बारे में सूचित किया जाना चाहते हैं कि कैसे जल्दी ही चुनें ।</string>
+    <string name="settings_time_10min">10 मिनटों</string>
+    <string name="settings_time_1min">1 मिनट</string>
+    <string name="settings_time_2min">2 मिनट</string>
+    <string name="settings_time_30sec">30 सेकंड</string>
+    <string name="settings_time_5min">5 मिनट</string>
+    <string name="settings_title_time">अधिसूचना समय</string>
+    <string name="settings_title_vibrate">कांपना</string>
 </resources>

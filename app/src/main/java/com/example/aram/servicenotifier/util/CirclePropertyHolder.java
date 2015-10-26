@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
- * Class Circle2d
+ * Class CirclePropertyHolder
  *
  * Used to draw circular objects on an Android View
  */

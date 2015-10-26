@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 /**
- * Created by Aram on 5/25/2015.
+ * Class MyApp
  */
 public class MyApp extends Application {
 

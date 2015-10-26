@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     public static final String APP_PREFERENCES = "ServiceNotifierPreferences";
     public static final String SERVICE_ENABLED = "is_service_enabled";
 
-    private static final long CLICK_DELAY_MS = 750;
+    private static final long CLICK_DELAY_MS = 750; // in milliseconds
     private long mLastClickTime;
 
     private MainPresenter mPresenter;
@@ -56,9 +56,10 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_debug:
-                startActivity(new Intent(this, DebugActivity.class));
-                break;
+//            // WARNING: Only used in developer mode
+//            case R.id.action_debug:
+//                startActivity(new Intent(this, DebugActivity.class));
+//                break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
@@ -90,8 +91,6 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     protected void onStart() {
         super.onStart();
 
-        Log.d("testing", "Activity - onStart");
-
         // Set the control button state, start looping animations
         mPresenter.resume();
     }
@@ -102,8 +101,6 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         // Suspend all looping animation threads
         mPresenter.pause();
-
-        Log.d("testing", "Activity - onStop");
     }
 
     @Override

@@ -8,12 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 import com.example.aram.servicenotifier.R;
-import com.example.aram.servicenotifier.main.MainPresenter;
 import com.example.aram.servicenotifier.util.CirclePropertyHolder;
 
 /**
@@ -443,7 +441,6 @@ public class FancyControlButton extends View implements AnimatedButton,
                 postInvalidate();
                 SystemClock.sleep(RIPPLE_DELAY_MS);
             }
-            Log.d("testing", "ripple thread exit");
         }
     }
 }

@@ -38,23 +38,21 @@ public class SignalMonitorService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.d("testing", "Service - onCreate");
 
         mServiceContext = this;
-        mLogger = new FileLogger(mServiceContext);
         mServiceStateHdlr = new ServiceStateHandler();
 
         mPhoneState = new MyPhoneStateListener();
         mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        // WARNING: Used in developer mode only
+        // mLogger = new FileLogger(mServiceContext);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d("testing", "Service - onStartCommand");
-
-        mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE |
-                PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        mTelephonyMgr.listen(mPhoneState, PhoneStateListener.LISTEN_SERVICE_STATE);
 
         // If we get killed, after returning from here, restart with null intent
         return START_STICKY;
@@ -72,7 +70,6 @@ public class SignalMonitorService extends Service {
         mServiceStateHdlr = null;
         mServiceContext = null;
         mLogger = null;
-        Log.d("testing", "Service - onDestroy");
     }
 
     @Override
@@ -84,11 +81,8 @@ public class SignalMonitorService extends Service {
     public void onLowMemory() {
         super.onLowMemory();
 
-        mLogger.log("LOW MEMORY!");
-
-        // Called when the overall system is running low on memory
-        //
-        // TODO: is this useful for performace analysis?
+        // WARNING: Used in developer mode only
+        //mLogger.log("LOW MEMORY!");
     }
 
     /**
@@ -101,41 +95,26 @@ public class SignalMonitorService extends Service {
         @Override
         public void onServiceStateChanged(ServiceState state) {
 
-            // TODO: DO NOT HANDLE POWER_OFF messages!!!
-
-            String stateStr = "";
             int stateCode = state.getState();
-
-            switch (stateCode) {
-                case ServiceState.STATE_IN_SERVICE:
-                    stateStr += "State: In Service";
-                    break;
-                case ServiceState.STATE_OUT_OF_SERVICE:
-                    stateStr += "State: Out of Service";
-                    break;
-                case ServiceState.STATE_EMERGENCY_ONLY:
-                    stateStr += "State: Emergency Only";
-                    break;
-                case ServiceState.STATE_POWER_OFF:
-                    stateStr += "State: Power off";
-                    break;
-            }
             mServiceStateHdlr.handleServiceStateChange(stateCode);
 
-            // Debug logging
-            Log.d("testing", stateStr);
-            mLogger.log(stateStr);
-        }
-
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            super.onSignalStrengthsChanged(signalStrength);
-
-            if (!signalStrength.isGsm()) {
-                //Log.d("testing", Integer.toString(signalStrength.getCdmaDbm()));
-            } else {
-                //Log.d("testing", Integer.toString(signalStrength.getGsmSignalStrength()));
-            }
+//            // WARNING: Used in developer mode only
+//            String stateStr = "";
+//            switch (stateCode) {
+//                case ServiceState.STATE_IN_SERVICE:
+//                    stateStr += "State: In Service";
+//                    break;
+//                case ServiceState.STATE_OUT_OF_SERVICE:
+//                    stateStr += "State: Out of Service";
+//                    break;
+//                case ServiceState.STATE_EMERGENCY_ONLY:
+//                    stateStr += "State: Emergency Only";
+//                    break;
+//                case ServiceState.STATE_POWER_OFF:
+//                    stateStr += "State: Power off";
+//                    break;
+//            }
+//            //mLogger.log(stateStr);
         }
     }
 }

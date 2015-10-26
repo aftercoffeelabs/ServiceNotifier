@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Service Notifier</string>
     <string name="about_title_libraries">第三方库</string>
     <string name="about_title_support">支撑</string>
     <string name="about_title_version">文本</string>
@@ -16,4 +15,13 @@
     <string name="notification_state_on_message">通知启用</string>
     <string name="notification_title">电话服务警报</string>
     <string name="title_activity_about">左右</string>
+    <string name="settings_category_notifications">通知</string>
+    <string name="settings_summary_time">选择您多久想要改变你的服务的通知。</string>
+    <string name="settings_time_10min">10分钟</string>
+    <string name="settings_time_1min">1分钟</string>
+    <string name="settings_time_2min">2分钟</string>
+    <string name="settings_time_30sec">30秒</string>
+    <string name="settings_time_5min">5分钟</string>
+    <string name="settings_title_time">通知时间</string>
+    <string name="settings_title_vibrate">颤动</string>
 </resources>

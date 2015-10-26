@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Service Notifier</string>
     <string name="about_title_libraries">サードパーティ製のライブラリ</string>
     <string name="about_title_support">サポート</string>
     <string name="about_title_version">バージョン</string>
@@ -16,4 +15,13 @@
     <string name="notification_state_on_message">通知は有効</string>
     <string name="notification_title">電話サービスアラート</string>
     <string name="title_activity_about">について</string>
+    <string name="settings_category_notifications">お知らせ</string>
+    <string name="settings_summary_time">あなたは、サービスの変更を通知する方法をすぐに選択してください。</string>
+    <string name="settings_time_10min">10分</string>
+    <string name="settings_time_1min">1分</string>
+    <string name="settings_time_2min">2分</string>
+    <string name="settings_time_30sec">30秒</string>
+    <string name="settings_time_5min">5分</string>
+    <string name="settings_title_time">通知時間</string>
+    <string name="settings_title_vibrate">振動します</string>
 </resources>

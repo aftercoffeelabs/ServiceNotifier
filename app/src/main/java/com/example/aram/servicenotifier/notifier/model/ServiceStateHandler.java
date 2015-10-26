@@ -101,10 +101,6 @@ public class ServiceStateHandler {
 
                     // Send the alert
                     notifier.sendNotification();
-
-                    Log.d("testing", "Passed criteria!");
-                } else {
-                    Log.d("testing", "Failed criteria...");
                 }
             }
         }

@@ -76,11 +76,6 @@ public class ServiceInteractorImpl implements ServiceInteractor {
         }
     }
 
-    @Override
-    public void restart() {
-
-    }
-
     /**
      * Queries the status of the SignalMonitorService.
      *

@@ -15,4 +15,7 @@
     <dimen name="card_title_text_size">18sp</dimen>
     <dimen name="card_subtext_text_size">14sp</dimen>
 
+    <dimen name="activity_about_lineSeparator_height">2px</dimen>
+    <dimen name="activity_about_lineSeparator_margin">15dp</dimen>
+
 </resources>

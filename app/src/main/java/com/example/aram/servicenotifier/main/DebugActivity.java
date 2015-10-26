@@ -30,7 +30,6 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -42,10 +41,10 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_debug) {
-            return true;
-        }
+        // WARNING: Only used in developer mode
+//        if (id == R.id.action_debug) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -54,7 +53,7 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //LeakCanary.install(getApplication()); // TODO: memory debugging
+        //LeakCanary.install(getApplication());
 
         setContentView(R.layout.activity_debug);
 

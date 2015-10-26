@@ -23,10 +23,7 @@ public class FileLogger {
     private final static String FILE_NAME = "service_notifier_log";
     private static File mFile = null;
     private Context mContext;
-
     private FileOutputStream mOutStream;
-    private FileInputStream mInStream;
-    private BufferedReader mBuffReader;
 
     public FileLogger(Context context) {
 

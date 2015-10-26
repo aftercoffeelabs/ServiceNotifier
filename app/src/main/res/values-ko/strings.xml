@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Service Notifier</string>
     <string name="about_title_libraries">타사 라이브러리</string>
     <string name="about_title_support">지원</string>
     <string name="about_title_version">버전</string>
@@ -16,4 +15,13 @@
     <string name="notification_state_on_message">알림 활성화</string>
     <string name="notification_title">전화 서비스 경고</string>
     <string name="title_activity_about">약</string>
+    <string name="settings_category_notifications">알림</string>
+    <string name="settings_summary_time">당신이 당신의 서비스 에 변경 내용을 알려야하는 방법을 빨리 선택합니다.</string>
+    <string name="settings_time_10min">10 분</string>
+    <string name="settings_time_1min">1 분</string>
+    <string name="settings_time_2min">이분</string>
+    <string name="settings_time_30sec">30초</string>
+    <string name="settings_time_5min">5 분</string>
+    <string name="settings_title_time">알림 시간</string>
+    <string name="settings_title_vibrate">진동</string>
 </resources>

@@ -15,7 +15,7 @@ import com.example.aram.servicenotifier.notifier.model.AlertCriteria;
 import com.example.aram.servicenotifier.notifier.model.Notifier;
 
 /**
- * Created by Aram on 8/28/2015.
+ * Class SettingsFragment
  */
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
