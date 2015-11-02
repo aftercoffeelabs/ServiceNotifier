@@ -53,10 +53,6 @@ public class CirclePropertyHolder {
         mRadius = r;
     }
 
-    public int getMaxDiameter() {return mMaxDiameter; }
-
-    public void setMaxDiameter(int d) {mMaxDiameter = d; }
-
     public void setDimensions(int centerX, int centerY, int radius, int d) {
         mCenterX = centerX;
         mCenterY = centerY;

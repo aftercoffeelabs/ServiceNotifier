@@ -98,7 +98,7 @@ public class SignalMonitorService extends Service {
             int stateCode = state.getState();
             mServiceStateHdlr.handleServiceStateChange(stateCode);
 
-//            // WARNING: Used in developer mode only
+            // WARNING: Used in developer mode only
 //            String stateStr = "";
 //            switch (stateCode) {
 //                case ServiceState.STATE_IN_SERVICE:
@@ -114,6 +114,7 @@ public class SignalMonitorService extends Service {
 //                    stateStr += "State: Power off";
 //                    break;
 //            }
+//            Log.d("testing", stateStr);
 //            //mLogger.log(stateStr);
         }
     }

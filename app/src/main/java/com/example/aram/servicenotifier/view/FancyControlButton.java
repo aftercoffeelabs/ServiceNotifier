@@ -52,7 +52,6 @@ public class FancyControlButton extends View implements AnimatedButton,
     private CirclePropertyHolder mRipple;           // ripple effect
 
     private Bitmap mBitmap;
-    private Paint mTextPaint = new Paint();;
 
     /**
      * FancyControlButton constructor
@@ -134,10 +133,6 @@ public class FancyControlButton extends View implements AnimatedButton,
 
         mButtonOn = false;
         mIsRippleAnimationRunning = false;
-
-//        mTextPaint.setColor(getResources().getColor(R.color.white));
-//        mTextPaint.setTextAlign(Paint.Align.CENTER);
-//        mTextPaint.setTextSize(30);
     }
 
     @Override
@@ -172,7 +167,6 @@ public class FancyControlButton extends View implements AnimatedButton,
             if (!mButtonStartPositionOn) {
                 mOnStateCircle.setDimensions(centerX, centerY, mAttrOffStateButtonSize, diameter);
             } else {
-                // TODO: does this work??
                 mOnStateCircle.setDimensions(centerX, centerY, mAttrOnStateButtonSize, diameter);
                 // This path of the code effectively toggles off the button, so toggle it back on!
                 mButtonOn = false;
@@ -188,7 +182,6 @@ public class FancyControlButton extends View implements AnimatedButton,
         // After view is initialized, check if the button needs to be automatically
         // set to the ON position for the user. This happens in the case where the
         // service is already running prior to the app starting
-//        Log.d("testing", "onSizeChanged");
 //        if (mButtonStartPositionOn == true && !mButtonOn) {
 //            toggleOn();
 //            mButtonStartPositionOn = false;
@@ -235,24 +228,21 @@ public class FancyControlButton extends View implements AnimatedButton,
      */
     private void toggleOn() {
 
-//        if (!mButtonOn) { // TODO: do we need this check?
+        mButtonOn = true;
 
-            mButtonOn = true;
+        mOnStateCircle.paint().setAlpha(MAX_ALPHA);
+        mOnStateCircle.setRadius(mAttrOnStateButtonSize);
 
-            mOnStateCircle.paint().setAlpha(MAX_ALPHA);
-            mOnStateCircle.setRadius(mAttrOnStateButtonSize);
+        mOffStateCircle.paint().setStyle(Paint.Style.FILL);
+        mOffStateCircle.setRadius(mAttrOffStateButtonSize);
 
-            mOffStateCircle.paint().setStyle(Paint.Style.FILL);
-            mOffStateCircle.setRadius(mAttrOffStateButtonSize);
+        mRipple.paint().setAlpha(MIN_ALPHA);
+        mRipple.setRadius(mAttrOffStateButtonSize);
 
-            mRipple.paint().setAlpha(MIN_ALPHA);
-            mRipple.setRadius(mAttrOffStateButtonSize);
+        // Start ripple animation
+        startRippleAnimation();
 
-            // Start ripple animation
-            startRippleAnimation();
-
-            invalidate();
-//        }
+        invalidate();
     }
 
     /**
@@ -260,7 +250,6 @@ public class FancyControlButton extends View implements AnimatedButton,
      */
     private void startToggleAnimation() {
 
-        // TODO: prevent new thread from starting again until animation cycle completes
         (new Thread(new ToggleAnimationRunnable(this))).start();
     }
 
@@ -341,9 +330,6 @@ public class FancyControlButton extends View implements AnimatedButton,
         // Always draw signal icon
         canvas.drawBitmap(mBitmap, ((getWidth() - mBitmap.getWidth()) / 2),
                 ((getHeight() - mBitmap.getHeight()) / 2), null);
-
-//        float offset = mBitmap.getWidth() * 0.80f;
-//        canvas.drawText("-89 dBm", mOnStateCircle.getCenterX(), mOnStateCircle.getCenterY() + offset, mTextPaint);
     }
 
     /**
