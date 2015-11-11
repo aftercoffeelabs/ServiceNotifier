@@ -3,6 +3,7 @@ package com.example.aram.servicenotifier.notifier.service;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.notifier.model.OnNotificationStateChangeListener;
@@ -52,6 +53,8 @@ public class ServiceInteractorImpl implements ServiceInteractor {
             case MONITOR_STOPPED: status = false;
                 break;
         }
+
+        Log.d("testing", "isServiceRunning - " + status);
 
         return status;
     }

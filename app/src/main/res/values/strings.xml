@@ -27,7 +27,7 @@
     <string name="about_title_libraries">Third-Party Libraries</string>
 
     <string name="about_text_version" translatable="false">1.0</string>
-    <string name="about_text_support" translatable="false">aftercoffeelabs@gmail.com</string>
+    <string name="about_text_support" translatable="false">support@aftercoffeelabs.com</string>
     <string name="about_text_libraries" translatable="false">ButterKnife</string>
 
     <!-- Settings Screen -->

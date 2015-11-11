@@ -5,7 +5,7 @@
     <string name="about_title_version">Versión</string>
     <string name="action_about">Acerca de</string>
     <string name="action_settings">Ajustes</string>
-    <string name="hint_tap_off_message">Pulse para desactivar las notificaciones</string>
+    <string name="hint_tap_off_message">Toque para desactivar las notificaciones</string>
     <string name="hint_tap_on_message">Toque para activar las notificaciones</string>
     <string name="notification_content_emergency">Sólo puede realizar llamadas de emergencia</string>
     <string name="notification_content_in_service">Su servicio ha sido restaurado</string>
