@@ -52,7 +52,6 @@ public class MainPresenterImpl implements MainPresenter, OnNotificationStateChan
     public void pause() {
 
         mMainView.stopButtonAnimation();
-
         mMainView.saveSessionData(mServiceInteractor.isServiceRunning());
     }
 

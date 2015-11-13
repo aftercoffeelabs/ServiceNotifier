@@ -1,13 +1,11 @@
 package com.example.aram.servicenotifier.main;
 
 import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +15,6 @@ import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.about.AboutActivity;
 import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.settings.SettingsActivity;
-import com.example.aram.servicenotifier.view.AnimatedButton;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
 import butterknife.ButterKnife;
@@ -96,10 +93,9 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
 
-        // Suspend all looping animation threads
         mPresenter.pause();
     }
 

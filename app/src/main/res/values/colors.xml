@@ -9,6 +9,7 @@
     <color name="grey_700">#616161</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
+    <color name="grey_line">#2a2a2a</color>
     <color name="grey_background">#303030</color>
 
     <!-- LIGHT GREEN: Primary -->

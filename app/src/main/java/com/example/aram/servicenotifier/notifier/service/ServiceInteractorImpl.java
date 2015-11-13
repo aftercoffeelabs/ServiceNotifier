@@ -54,8 +54,6 @@ public class ServiceInteractorImpl implements ServiceInteractor {
                 break;
         }
 
-        Log.d("testing", "isServiceRunning - " + status);
-
         return status;
     }
 
