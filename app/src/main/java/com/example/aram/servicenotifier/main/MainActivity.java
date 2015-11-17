@@ -17,17 +17,14 @@ import com.example.aram.servicenotifier.infrastructure.MyApp;
 import com.example.aram.servicenotifier.settings.SettingsActivity;
 import com.example.aram.servicenotifier.view.FancyControlButton;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 /**
  * Class MainActivity
  */
 public class MainActivity extends ActionBarActivity implements MainView, View.OnClickListener {
 
-    @InjectView(R.id.mainView_control_button) FancyControlButton mControlButton;
-    @InjectView(R.id.mainView_hint_text) TextView mHintMessage;
-    @InjectView(R.id.mainView_state_text) TextView mStateMessage;
+    private FancyControlButton mControlButton;
+    private TextView mHintMessage;
+    private TextView mStateMessage;
 
     public static final String APP_PREFERENCES = "ServiceNotifierPreferences";
     public static final String SERVICE_ENABLED = "is_service_enabled";
@@ -73,10 +70,12 @@ public class MainActivity extends ActionBarActivity implements MainView, View.On
 
         setContentView(R.layout.activity_main);
 
-        ButterKnife.inject(this);
+        // Get handles to buttons
+        mControlButton = (FancyControlButton) findViewById(R.id.mainView_control_button);
+        mHintMessage   = (TextView) findViewById(R.id.mainView_hint_text);
+        mStateMessage  = (TextView) findViewById(R.id.mainView_state_text);
 
         mPresenter = new MainPresenterImpl(this);
-
         mControlButton.setOnClickListener(this);
 
         // Setup animators

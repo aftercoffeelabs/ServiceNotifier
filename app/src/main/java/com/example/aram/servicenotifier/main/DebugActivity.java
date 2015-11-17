@@ -14,17 +14,13 @@ import android.widget.TextView;
 import com.example.aram.servicenotifier.R;
 import com.example.aram.servicenotifier.util.FileLogger;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
-
 public class DebugActivity extends ActionBarActivity implements MainView, View.OnClickListener {
 
-    @InjectView(R.id.textView) TextView mTextView;
-    @InjectView(R.id.startButton) Button mStartButton;
-    @InjectView(R.id.logButton) Button mLogButton;
-    @InjectView(R.id.deleteButton) Button mDeleteButton;
-    @InjectView(R.id.logTextView) TextView mLogMsgTextView;
+    private TextView mTextView;
+    private Button mStartButton;
+    private Button mLogButton;
+    private Button mDeleteButton;
+    private TextView mLogMsgTextView;
 
     private MainPresenter mPresenter;
 
@@ -57,7 +53,11 @@ public class DebugActivity extends ActionBarActivity implements MainView, View.O
 
         setContentView(R.layout.activity_debug);
 
-        ButterKnife.inject(this);
+        mTextView = (TextView) findViewById(R.id.textView);
+        mStartButton = (Button) findViewById(R.id.startButton);;
+        mLogButton = (Button) findViewById(R.id.logButton);;
+        mDeleteButton = (Button) findViewById(R.id.deleteButton);;
+        mLogMsgTextView = (TextView) findViewById(R.id.logTextView);;
 
         mStartButton.setOnClickListener(this);
         mLogButton.setOnClickListener(this);
